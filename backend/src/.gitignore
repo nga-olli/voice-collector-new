@@ -1,0 +1,17 @@
+/vendor/
+composer.lock
+app/storage/cache/data/*
+app/storage/cache/annotations/*
+app/storage/cache/metadata/*
+app/storage/files/*
+app/storage/logs/*
+app/views/node_modules/
+app/views/.nuxt/
+app/views/dist/
+
+!app/modules/.gitkeep
+!app/storage/files/.gitkeep
+!app/storage/cache/data/.gitkeep
+!app/storage/cache/annotations/.gitkeep
+!app/storage/cache/metadata/.gitkeep
+!app/storage/logs/.gitkeep

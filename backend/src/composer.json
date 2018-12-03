@@ -1,0 +1,9 @@
+{
+  "name": "olli/voice-collector-backend",
+  "require": {
+    "shirou/php-framework": "dev-master",
+    "robmorgan/phinx": "^0.9.2",
+    "fzaninotto/faker": "^1.7",
+    "jenssegers/agent": "^2.6"
+  }
+}
