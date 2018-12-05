@@ -2,12 +2,23 @@
 namespace Job\Transformer;
 
 use League\Fractal\TransformerAbstract;
-use Job\Model\Job as JobModel;
+use Phalcon\Di as PhDi;
+use Job\{
+    Model\Job as JobModel,
+    Model\RelUserJob as RelUserJobModel,
+    Transformer\Progress as ProgressTransformer
+};
+use User\{
+    Model\User as UserModel,
+    Transformer\User as UserTransformer
+};
 use Moment\Moment;
 
 class Job extends TransformerAbstract
 {
-    protected $availableIncludes = [];
+    protected $availableIncludes = [
+        'progress'
+    ];
 
     public function transform(JobModel $job)
     {
@@ -29,5 +40,25 @@ class Job extends TransformerAbstract
                 'timestamp' => (string) $job->dateexpired
             ]
         ];
+    }
+
+    public function includeProgress(JobModel $job)
+    {
+        $di = PhDi::getDefault();
+        $authService = $di->get('auth');
+
+        $myUserProgress = RelUserJobModel::findFirst([
+            'uid = :uid: AND jid = :jid:',
+            'bind' => [
+                'uid' => (int) $authService->getUser()['id'],
+                'jid' => (int) $job->id
+            ]
+        ]);
+        
+        if ($myUserProgress) {
+            return $this->item($myUserProgress, new ProgressTransformer);
+        } else {
+            return null;
+        }
     }
 }

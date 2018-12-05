@@ -89,6 +89,16 @@ class Job extends AbstractModel
      */
     public function initialize()
     {
+        $this->hasManyToMany(
+            "id",
+            "\Job\Model\RelUserJob",
+            "jid",
+            "uid",
+            "\User\Model\User",
+            "id",
+            array('alias' => 'users')
+        );
+
         $config = $this->getDI()->get('config');
 
         if (!$this->getDI()->get('app')->isConsole()) {

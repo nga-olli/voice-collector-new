@@ -3,6 +3,7 @@ namespace User\Transformer;
 
 use League\Fractal\TransformerAbstract;
 use User\Model\User as UserModel;
+use Job\Model\Job as JobModel;
 use Moment\Moment;
 
 class User extends TransformerAbstract
@@ -11,8 +12,6 @@ class User extends TransformerAbstract
 
     public function transform(UserModel $user)
     {
-        $humandatecreated = new Moment($user->datecreated);
-
         return [
             'id' => (string) $user->id,
             'fullname' => (string) $user->fullname,
@@ -35,8 +34,10 @@ class User extends TransformerAbstract
             ],
             'avatar' => (string) $user->getAvatarJson(),
             'mobilenumber' => (string) $user->mobilenumber,
-            'datecreated' => (string) $user->datecreated,
-            'humandatecreated' => (string) $humandatecreated->format('d M Y, H:i')
+            'datecreated' => [
+                'readable' => (string) (new Moment($user->datecreated))->format('d/m/Y'),
+                'timestamp' => (string) $user->datecreated
+            ]
         ];
     }
 }

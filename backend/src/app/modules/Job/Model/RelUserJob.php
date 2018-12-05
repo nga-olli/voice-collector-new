@@ -12,6 +12,7 @@ use Core\Helper\Utils as Helper;
  * @Source('fly_rel_user_job');
  * @Behavior('\Shirou\Behavior\Model\Timestampable');
  * @BelongsTo('uid', '\User\Model\User', 'id', {'alias': 'user'})
+ * @BelongsTo('jid', '\Job\Model\Job', 'id', {'alias': 'job'})
  */
 class RelUserJob extends AbstractModel
 {
@@ -38,6 +39,11 @@ class RelUserJob extends AbstractModel
     public $progress;
 
     /**
+    * @Column(type="integer", nullable=true, column="ruj_status")
+    */
+    public $status;
+
+    /**
     * @Column(type="integer", nullable=true, column="ruj_date_created")
     */
     public $datecreated;
@@ -46,4 +52,66 @@ class RelUserJob extends AbstractModel
     * @Column(type="integer", nullable=true, column="ruj_date_modified")
     */
     public $datemodified;
+
+    const STATUS_COMPLETED = 1;
+    const STATUS_CHECKING = 3;
+    const STATUS_DOING = 5;
+
+    public function getStatusName(): string
+    {
+        $name = '';
+        $lang = self::getStaticDi()->get('lang');
+
+        switch ($this->status) {
+            case self::STATUS_COMPLETED:
+                $name = $lang->_('label-status-completed');
+                break;
+            case self::STATUS_CHECKING:
+                $name = $lang->_('label-status-checking');
+                break;
+            case self::STATUS_DOING:
+                $name = $lang->_('label-status-doing');
+                break;
+        }
+
+        return $name;
+    }
+
+    public static function getStatusList()
+    {
+        $lang = self::getStaticDi()->get('lang');
+
+        return $data = [
+            [
+                'label' => $lang->_('label-status-completed'),
+                'value' => (string) self::STATUS_COMPLETED
+            ],
+            [
+                'label' => $lang->_('label-status-checking'),
+                'value' => (string) self::STATUS_CHECKING
+            ],
+            [
+                'label' => $lang->_('label-status-doing'),
+                'value' => (string) self::STATUS_DOING
+            ],
+        ];
+    }
+
+    public function getStatusStyle(): string
+    {
+        $class = '';
+        switch ($this->status) {
+            case self::STATUS_COMPLETED:
+                $class = 'success';
+                break;
+            case self::STATUS_CHECKING:
+                $class = 'warning';
+                break;
+            case self::STATUS_DOING:
+                $class = 'default';
+                break;
+        }
+
+        return $class;
+    }
 }
