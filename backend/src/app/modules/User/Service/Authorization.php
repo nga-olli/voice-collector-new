@@ -104,7 +104,7 @@ class Authorization extends ShServiceLocator
             $current_action = $dispatcher->getActionName();
 
             // Get role from jwt authToken
-            $group = $authManager->loggedIn() ? $authManager->getUser()->groupid : $config->acl->groups->default;
+            $group = $authManager->loggedIn() ? $authManager->getUser()['groupid'] : $config->acl->groups->default;
 
             // Get ACL
             $acl = $this->_getAcl($config);

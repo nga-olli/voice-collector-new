@@ -87,10 +87,18 @@ class AuthManager extends PhPlugin
      */
     public function setUser($user)
     {
+        // test many to many
+        var_dump($user->getJobs());
+        die;
+
         // Hide password in jwt token
         $user->password = '';
 
-        $this->user = $user;
+        $this->user = [
+            'id' => $user->id,
+            'groupid' => $user->groupid,
+            'status' => $user->status
+        ];
 
         return $this;
     }

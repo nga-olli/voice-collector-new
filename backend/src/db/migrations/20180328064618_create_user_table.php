@@ -43,7 +43,7 @@ class CreateUserTable extends AbstractMigration
         $this->execute("
             INSERT INTO `fly_user` (`u_id`, `u_screen_name`, `u_full_name`, `u_email`, `u_address`, `u_password`, `u_groupid`, `u_avatar`, `u_gender`, `u_status`, `u_oauth_provider`, `u_oauth_uid`, `u_oauth_access_token`, `u_onesignal_id`, `u_state`, `u_dob`, `u_date_created`, `u_date_last_change_password`, `u_date_modified`, `u_mobile_number`, `u_is_verified`, `u_verify_type`)
             VALUES
-            (1, 'Administrator', 'Duy Nguyễn', 'admin@localhost.local', '', '$2y$10$YXlpU3JCZENrSER5OCsyVO8C3pKbA3Dr.2NwjhHD/EL/lfwDMzGv6', 'administrator', '', 'male', 1, '', '', '', '', 0, NULL, 1494560696, 1522141389, 1522141389, '', 1, 1);
+            (1, 'Administrator', 'Duy Nguyễn', 'admin@localhost.local', '', '\$2y\$10\$YXlpU3JCZENrSER5OCsyVO8C3pKbA3Dr.2NwjhHD/EL/lfwDMzGv6', 'administrator', '', 'male', 1, '', '', '', '', 0, NULL, 1494560696, 1522141389, 1522141389, '', 1, 1);
         ");
     }
 }

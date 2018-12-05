@@ -9,6 +9,7 @@ timezone: Asia/Ho_Chi_Minh
 modules:
   core
   user
+  job
 annotationsDir: /app/storage/cache/annotations/
 metaDataDir: /app/storage/cache/metadata/
 cache:
@@ -18,6 +19,18 @@ cache:
     prefix: _vui_
 users:
   directory: /app/storage/files/users/
+  minsize: 100
+  maxsize: 10000000
+  isoverwrite: false
+  thumbsize: 300x200
+  mediumsize: 540x100
+  fullsize: 1200x1200
+  mimes:
+    image/jpeg
+    image/jpg
+    image/png
+jobs:
+  directory: /app/storage/files/jobs/
   minsize: 100
   maxsize: 10000000
   isoverwrite: false

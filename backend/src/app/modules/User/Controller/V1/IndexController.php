@@ -301,7 +301,7 @@ class IndexController extends AbstractController
             throw new UserException(UserErrorCode::AUTH_NOEMAIL);
         };
 
-        if (count($password) == 0) {
+        if (strlen($password) === 0) {
             throw new UserException(UserErrorCode::AUTH_NOPASSWORD);
         };
 

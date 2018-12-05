@@ -122,6 +122,11 @@ class User extends AbstractModel
     public $isverified;
 
     /**
+    * @Column(type="integer", nullable=true, column="u_is_profile_updated")
+    */
+    public $isprofileupdated;
+
+    /**
     * @Column(type="integer", nullable=true, column="u_verify_type")
     */
     public $verifytype;
@@ -138,6 +143,18 @@ class User extends AbstractModel
      */
     public function initialize()
     {
+        // * @HasManyToMany('id', '\Job\Model\RelUserJob', 'uid', 'jid', '\Job\Model\Job', 'id', {'alias': 'jobs'})
+
+        $this->hasManyToMany(
+            "id",
+            "\Job\Model\RelUserJob",
+            "uid",
+            "jid",
+            "\Job\Model\Job",
+            "id",
+            array('alias' => 'jobs')
+        );
+
         $config = $this->getDI()->get('config');
 
         if (!$this->getDI()->get('app')->isConsole()) {

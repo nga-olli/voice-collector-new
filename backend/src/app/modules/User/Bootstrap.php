@@ -43,6 +43,6 @@ class Bootstrap extends ShBootstrap
 
         $this->getEventsManager()->attach('dispatch', $di->get('user')->authentication());
         $this->getEventsManager()->attach('dispatch', $di->get('user')->authorization());
-        $this->getEventsManager()->attach('dispatch', $di->get('user')->tracking());
+        // $this->getEventsManager()->attach('dispatch', $di->get('user')->tracking());
     }
 }

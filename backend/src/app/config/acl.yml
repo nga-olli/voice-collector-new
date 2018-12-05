@@ -2,7 +2,9 @@
 
 publicEndpoint:
   /v1/users/login/email
+  /v1/users/login/phone
   /v1/users/securegroup
+  /v1/users/verify/sms
 
 groups:
   default: guest
@@ -13,3 +15,14 @@ groups:
   administrator:
     User:
       v1:index|*
+    Job:
+      v1:index|*
+  member:
+    User:
+      v1:index|updatepassword
+      v1:index|updateprofile
+      v1:index|profile
+      v1:index|formsource
+    Record:
+      v1:index|scripts
+      v1:index|create
