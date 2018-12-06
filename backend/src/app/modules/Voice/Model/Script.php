@@ -9,6 +9,7 @@ use Phalcon\Validation\Validator\Uniqueness;
 /**
  * @Source('fly_voice_script');
  * @Behavior('\Shirou\Behavior\Model\Timestampable');
+ * @HasMany('id', '\Voice\Model\Voice', 'vsid', {'alias': 'voices'})
  */
 class Script extends AbstractModel
 {
@@ -94,4 +95,9 @@ class Script extends AbstractModel
 
         return $class;
     }
+
+    // public function afterDelete()
+    // {
+    //     $this->getVoices()->delete();
+    // }
 }

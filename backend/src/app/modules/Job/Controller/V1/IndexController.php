@@ -76,26 +76,26 @@ class IndexController extends AbstractController
         }
     }
 
-    // /**
-    //  * @Route("/{id:[0-9]+}", methods={"GET"})
-    //  */
-    // public function getAction(int $id = 0)
-    // {
-    //     $myUser = UserModel::findFirst([
-    //         'id = :id:',
-    //         'bind' => ['id' => (int) $id]
-    //     ]);
+    /**
+     * @Route("/{id:[0-9]+}", methods={"GET"})
+     */
+    public function getAction(int $id = 0)
+    {
+        $myJob = JobModel::findFirst([
+            'id = :id:',
+            'bind' => ['id' => (int) $id]
+        ]);
 
-    //     if (!$myUser) {
-    //         throw new UserException(ErrorCode::DATA_NOTFOUND);
-    //     }
+        if (!$myJob) {
+            throw new UserException(ErrorCode::DATA_NOTFOUND);
+        }
 
-    //     return $this->createItem(
-    //         $myUser,
-    //         new UserTransformer,
-    //         'data'
-    //     );
-    // }
+        return $this->createItem(
+            $myJob,
+            new JobTransformer,
+            'data'
+        );
+    }
 
     // /**
     //  * @Route("/", methods={"POST"})

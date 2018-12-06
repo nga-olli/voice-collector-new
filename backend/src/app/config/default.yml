@@ -10,6 +10,7 @@ modules:
   core
   user
   job
+  voice
 annotationsDir: /app/storage/cache/annotations/
 metaDataDir: /app/storage/cache/metadata/
 cache:
@@ -31,6 +32,30 @@ users:
     image/png
 jobs:
   directory: /app/storage/files/jobs/
+  minsize: 100
+  maxsize: 10000000
+  isoverwrite: false
+  thumbsize: 300x200
+  mediumsize: 540x100
+  fullsize: 1200x1200
+  mimes:
+    image/jpeg
+    image/jpg
+    image/png
+voices:
+  directory: /app/storage/files/voices/
+  minsize: 100
+  maxsize: 10000000
+  isoverwrite: false
+  mimes:
+    audio/wav
+    audio/vnd.wav
+    audio/ogg
+    audio/webm
+    audio/wave
+    audio/vnd.wave
+rewards:
+  directory: /app/storage/files/rewards/
   minsize: 100
   maxsize: 10000000
   isoverwrite: false

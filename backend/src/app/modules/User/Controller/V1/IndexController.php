@@ -272,6 +272,7 @@ class IndexController extends AbstractController
             'groupList' => UserModel::getGroupList(),
             'statusList' => UserModel::getStatusList(),
             'verifyList' => UserModel::getVerifyList(),
+            'genderList' => UserModel::getGenderList()
         ], 'data');
     }
 
@@ -354,5 +355,175 @@ class IndexController extends AbstractController
         $tokenResponse = $this->auth->getTokenResponse();
 
         return $this->respondWithArray($tokenResponse, 'data');
+    }
+
+    /**
+     * Verify token (Firebase)
+     *
+     * @Route("/verify/{account:[a-z]{1,10}}", methods={"POST"})
+     */
+    public function verifyAction($account)
+    {
+        $formData = (array) $this->request->getJsonRawBody();
+
+        if (!isset($formData['token']) || strlen($formData['token']) == 0) {
+            throw new \Exception('Missing Firebase Token');
+        }
+        try {
+            $verifiedIdToken = $this->firebase->getAuth()->verifyIdToken($formData['token']);
+        } catch (InvalidToken $e) {
+            throw new \Exception($e->getMessage());
+        }
+
+        $firebaseUid = $verifiedIdToken->getClaim('sub');
+
+        // Check existed user
+        $myUser = UserModel::findFirst([
+            'oauthuid = :oauthuid: AND status = :status:',
+            'bind' => [
+                'oauthuid' => (string) $firebaseUid,
+                'status' => UserModel::STATUS_ENABLE
+            ]
+        ]);
+
+        if (!$myUser) {
+            $myUser = new UserModel();
+            $myUser->assign([
+                'password' => (string) $this->security->hash(rand(1, 999999)),
+                'mobilenumber' => (string) $firebaseUser->phoneNumber,
+                'verifytype' => (int) UserModel::VERIFY_TYPE_PHONE,
+                'isverified' => (int) UserModel::IS_VERIFIED,
+                'groupid' => (string) 'member',
+                'status' => (int) UserModel::STATUS_ENABLE,
+                'oauthprovider' => 'firebase',
+                'oauthuid' => (string) $firebaseUid,
+                'oauthaccesstoken' => (string) $formData['token'],
+                'isprofileupdated' => (int) UserModel::IS_NOT_PROFILE_UPDATED
+            ]);
+
+            if (!$myUser->create()) {
+                throw new UserException(UserErrorCode::USER_REGISTERFAIL);
+            }
+        }
+
+        $this->auth->setUser($myUser);
+
+        // Generate jwt authToken for activate user.
+        $tokenResponse = $this->auth->getTokenResponse();
+
+        return $this->respondWithArray($tokenResponse, 'data');
+    }
+
+    /**
+     * Update owner password
+     *
+     * @Route("/updatepassword", methods={"PUT"})
+     */
+    public function updatepasswordAction()
+    {
+        $formData = (array) $this->request->getJsonRawBody();
+
+        $myUser = UserModel::findFirst([
+            'id = :id: AND status = :status: AND isverified = :isverified:',
+            'bind' => [
+                'id' => (int) $this->auth->getUser()->id,
+                'status' => UserModel::STATUS_ENABLE,
+                'isverified' => UserModel::IS_VERIFIED
+            ]
+        ]);
+
+        if (!$myUser) {
+            throw new UserException(ErrorCode::DATA_NOTFOUND);
+        }
+
+        if ($formData['newpassword'] != $formData['repeatnewpassword']) {
+            throw new UserException(UserErrorCode::USER_PASSWORD_NOT_MATCH);
+        }
+
+        $myUser->password = $this->security->hash($formData['newpassword']);
+        $myUser->datelastchangepassword = time();
+        if (!$myUser->update()) {
+            throw new UserException(ErrorCode::DATA_UPDATE_FAIL);
+        }
+
+        $this->auth->setUser($myUser);
+
+        // Generate jwt authToken for activate user.
+        $tokenResponse = $this->auth->getTokenResponse();
+
+        return $this->respondWithArray($tokenResponse, 'data');
+    }
+
+    /**
+     * Update owner profile
+     *
+     * @Route("/profile", methods={"PUT"})
+     */
+    public function updateprofileAction()
+    {
+        $formData = (array) $this->request->getJsonRawBody();
+        $uid = (int) $this->getDI()->getAuth()->getUser()->id;
+
+        $myUser = UserModel::findFirst([
+            'id = :id: AND status = :status: AND isverified = :isverified:',
+            'bind' => [
+                'id' => (int) $uid,
+                'status' => (int) UserModel::STATUS_ENABLE,
+                'isverified' => (int) UserModel::IS_VERIFIED
+            ]
+        ]);
+
+        if (!$myUser) {
+            throw new UserException(ErrorCode::DATA_NOTFOUND);
+        }
+
+        $dob = \DateTime::createFromFormat('d/m/Y', $formData['dob']);
+
+        $myUser->assign([
+            'fullname' => (string) $formData['fullname'],
+            'email' => (string) $formData['email'],
+            'gender' => (int) $formData['gender'],
+            'dob' => (int) $dob->getTimestamp(),
+            'isprofileupdated' => (int) UserModel::IS_PROFILE_UPDATED
+        ]);
+
+        if (!$myUser->update()) {
+            throw new UserException(ErrorCode::DATA_UPDATE_FAIL);
+        }
+
+        return $this->createItem(
+            $myUser,
+            new UserTransformer,
+            'data'
+        );
+    }
+
+    /**
+     * Get owner profile
+     *
+     * @Route("/profile", methods={"GET"})
+     */
+    public function profileAction()
+    {
+        $uid = (int) $this->getDI()->getAuth()->getUser()->id;
+
+        $myUser = UserModel::findFirst([
+            'id = :id: AND status = :status: AND isverified = :isverified:',
+            'bind' => [
+                'id' => (int) $uid,
+                'status' => (int) UserModel::STATUS_ENABLE,
+                'isverified' => (int) UserModel::IS_VERIFIED
+            ]
+        ]);
+
+        if (!$myUser) {
+            throw new UserException(ErrorCode::DATA_NOTFOUND);
+        }
+
+        return $this->createItem(
+            $myUser,
+            new UserTransformer,
+            'data'
+        );
     }
 }

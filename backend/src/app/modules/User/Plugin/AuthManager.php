@@ -93,7 +93,8 @@ class AuthManager extends PhPlugin
         $this->user = [
             'id' => $user->id,
             'groupid' => $user->groupid,
-            'status' => $user->status
+            'status' => $user->status,
+            'fullname' => $user->fullname
         ];
 
         return $this;
