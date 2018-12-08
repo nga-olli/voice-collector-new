@@ -15,3 +15,5 @@ app/views/dist/
 !app/storage/cache/annotations/.gitkeep
 !app/storage/cache/metadata/.gitkeep
 !app/storage/logs/.gitkeep
+.DS_Store
+.DS_Store?
