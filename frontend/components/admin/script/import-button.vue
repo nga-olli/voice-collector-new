@@ -1,38 +1,46 @@
 <lang src="./lang.yml"></lang>
 
 <template>
-  <el-upload
-    action=""
-    multiple
-    :auto-upload="false"
-    with-credentials
-    :file-list="myFiles"
-    :on-change="onChange"
-    :on-remove="onRemove"
-    >
-    <el-button slot="trigger" size="mini" type="primary">
-      Upload voice script files
-    </el-button>
-    <el-button v-show="myFiles.length > 0" :loading="loading" style="margin-left: 10px;" size="mini" icon="el-icon-fa-upload" type="success" @click="onUpload">
-      {{ $t('label.import') }}
-    </el-button>
-    <div class="el-upload__tip" slot="tip">
-      {{ $t('msg.fileTypeAllowed') }}
-    </div>
-  </el-upload>
+  <div>
+    <el-select clearable size="small" v-model="categoryId" :placeholder="$t('default.all')">
+      <el-option v-for="item in formSource.voicescriptcategoryList" :key="item.id" :label="item.name" :value="item.id">
+      </el-option>
+    </el-select>
+    <el-upload
+      action=""
+      multiple
+      :auto-upload="false"
+      with-credentials
+      :file-list="myFiles"
+      :on-change="onChange"
+      :on-remove="onRemove"
+      >
+      <el-button slot="trigger" size="mini" type="primary">
+        Upload voice script files
+      </el-button>
+      <el-button v-show="myFiles.length > 0" :loading="loading" style="margin-left: 10px;" size="mini" icon="el-icon-fa-upload" type="success" @click="onUpload">
+        {{ $t('label.import') }}
+      </el-button>
+      <div class="el-upload__tip" slot="tip">
+        {{ $t('msg.fileTypeAllowed') }}
+      </div>
+    </el-upload>
+  </div>
 </template>
 
 <script lang="ts">
 import { Vue, Component } from 'nuxt-property-decorator';
-import { Action } from 'vuex-class';
+import { Action, State } from 'vuex-class';
 
 @Component
 export default class ImportButton extends Vue {
   @Action('scripts/import') importAction;
   @Action('scripts/get_all') listAction;
+  @State(state => state.scripts.formSource) formSource;
 
   loading: boolean = false;
   myFiles: any[] = [];
+  categoryId: any = null;
 
   onChange(file, filelist) {
     this.myFiles = filelist;
@@ -43,9 +51,22 @@ export default class ImportButton extends Vue {
   }
 
   async onUpload() {
+    if (this.categoryId === null) {
+      this.$message({
+        showClose: true,
+        message: `Please select Script category`,
+        type: 'warning',
+        duration: 5 * 1000
+      });
+      return;
+    }
+
     this.loading = true;
 
-    await this.importAction({ formData: this.myFiles })
+    await this.importAction({ formData: {
+      categoryId: this.categoryId,
+      files: this.myFiles
+    } })
       .then(async res => {
         this.loading = false;
 
@@ -57,6 +78,9 @@ export default class ImportButton extends Vue {
         });
 
         await this.listAction({ query: {} });
+
+        this.myFiles = [];
+        this.categoryId = null;
       })
       .catch(err => {
         this.loading = false;

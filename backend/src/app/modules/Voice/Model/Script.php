@@ -10,9 +10,15 @@ use Phalcon\Validation\Validator\Uniqueness;
  * @Source('fly_voice_script');
  * @Behavior('\Shirou\Behavior\Model\Timestampable');
  * @HasMany('id', '\Voice\Model\Voice', 'vsid', {'alias': 'voices'})
+ * @HasOne('vscid', '\Voice\Model\ScriptCategory', 'id', {'alias': 'category'})
  */
 class Script extends AbstractModel
 {
+    /**
+    * @Column(type="integer", nullable=true, column="vsc_id")
+    */
+    public $vscid;
+
     /**
     * @Primary
     * @Identity

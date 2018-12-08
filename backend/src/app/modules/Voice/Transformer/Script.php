@@ -13,6 +13,7 @@ class Script extends TransformerAbstract
     {
         return [
             'id' => (string) $voicescript->id,
+            'vscid' => (string) $voicescript->vscid,
             'command' => (string) $voicescript->command,
             'text' => (string) mb_strtolower($voicescript->text, 'UTF-8'),
             'status' =>  [

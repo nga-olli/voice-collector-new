@@ -8,9 +8,9 @@ use Core\Controller\AbstractController;
 use Core\Helper\Utils as Helper;
 use Voice\Model\Voice as VoiceModel;
 use User\Model\User as UserModel;
-// use Record\Model\VoiceScript as VoiceScriptModel;
+use Voice\Model\Script as VoiceScriptModel;
 // use Record\Transformer\VoiceScript as VoiceScriptTransformer;
-// use Record\Transformer\Voice as VoiceTransformer;
+use Voice\Transformer\Voice as VoiceTransformer;
 // use Record\Transformer\VoiceItem as VoiceItemTransformer;
 
 /**
@@ -80,80 +80,50 @@ class IndexController extends AbstractController
     //     }
     // }
 
-    // /**
-    //  * @Route("/", methods={"POST"})
-    //  */
-    // public function createAction()
-    // {
-    //     // openlog('myapplication', LOG_NDELAY, LOG_USER);
-    //     // foreach ($this->request->getUploadedFiles() as $files) {
-    //     //     syslog(LOG_WARNING, json_encode($files));
-    //     // }
+    /**
+     * @Route("/upload", methods={"POST"})
+     */
+    public function uploadAction()
+    {
+        // openlog('myapplication', LOG_NDELAY, LOG_USER);
+        // foreach ($this->request->getUploadedFiles() as $files) {
+        //     syslog(LOG_WARNING, json_encode($files));
+        // }
 
-    //     $formData = (array) $this->request->getPost();
-    //     $uid = (int) $this->getDI()->getAuth()->getUser()->id;
-    //     $myFireBase = $this->firebase->getDatabase();
+        $formData = (array) $this->request->getPost();
+        $uid = (int) $this->getDI()->getAuth()->getUser()['id'];
 
-    //     $myUser = UserModel::findFirstById($uid);
-    //     if (!$myUser) {
-    //         throw new UserException(ErrorCode::DATA_NOTFOUND);
-    //     }
+        $myUser = UserModel::findFirstById($uid);
+        if (!$myUser) {
+            throw new UserException(ErrorCode::DATA_NOTFOUND);
+        }
 
-    //     $myVoice = VoiceModel::findFirst([
-    //         'vsid = :vsid: AND uid = :uid:',
-    //         'bind' => [
-    //             'vsid' => (int) $formData['sid'],
-    //             'uid' => (int) $myUser->id
-    //         ]
-    //     ]);
+        $myVoice = new VoiceModel();
+        $myVoice->assign([
+            'vsid' => (int) $formData['vsid'],
+            'jid' => (int) $formData['jid'],
+            'uid' => (int) $myUser->id,
+            'status' => (int) VoiceModel::STATUS_PENDING
+        ]);
 
-    //     if ($myVoice) {
-    //         throw new UserException(ErrorCode::DATA_DUPLICATE);
-    //     }
+        if (!$myVoice->create()) {
+            throw new UserException(ErrorCode::DATA_CREATE_FAIL);
+        }
 
-    //     $myVoice = new VoiceModel();
-    //     $myVoice->assign([
-    //         'vsid' => (int) $formData['sid'],
-    //         'uid' => (int) $myUser->id,
-    //         'status' => (int) VoiceModel::STATUS_PENDING
-    //     ]);
+        // Disable voice script
+        $myVoiceScript = VoiceScriptModel::findFirstById((int) $myVoice->vsid);
+        $myVoiceScript->status = VoiceScriptModel::STATUS_DISABLE;
 
-    //     if (!$myVoice->create()) {
-    //         throw new UserException(ErrorCode::DATA_CREATE_FAIL);
-    //     }
+        if (!$myVoiceScript->update()) {
+            throw new UserException(ErrorCode::DATA_UPDATE_FAIL);
+        }
 
-    //     // Disable voice script
-    //     $myVoiceScript = VoiceScriptModel::findFirstById((int) $myVoice->vsid);
-    //     $myVoiceScript->status = VoiceScriptModel::STATUS_DISABLE;
-
-    //     if (!$myVoiceScript->update()) {
-    //         throw new UserException(ErrorCode::DATA_UPDATE_FAIL);
-    //     }
-
-    //     // Reduce record times & increase tmp point
-    //     $myProfile = $myUser->getProfile();
-    //     $myProfile->recordtimes = (int) $myProfile->recordtimes - 1;
-    //     $myProfile->tmppoint = (int) $myProfile->tmppoint + 1;
-
-    //     if (!$myProfile->update()) {
-    //         throw new UserException(ErrorCode::DATA_UPDATE_FAIL);
-    //     }
-
-    //     // set firebase
-    //     try {
-    //         $myFireBase->getReference('/users/' . $myUser->oauthuid . '/record_times')->set($myProfile->recordtimes);
-    //         $myFireBase->getReference('/users/' . $myUser->oauthuid . '/tmp_point')->set($myProfile->tmppoint);
-    //     } catch (ApiException $e) {
-    //         $response = $e->getResponse();
-    //         throw new \Exception($response->getBody());
-    //     }
-
-    //     return $this->createItem(
-    //         $myVoice,
-    //         new VoiceTransformer,
-    //         'data'
-    //     );
-    // }
+        return $this->createItem(
+            $myVoice,
+            new VoiceTransformer,
+            'data'
+        );
+    }
 
     // /**
     //  * @Route("/formsource", methods={"GET"})

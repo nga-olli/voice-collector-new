@@ -5,8 +5,11 @@ use Shirou\Constants\ErrorCode;
 use Shirou\UserException;
 use Core\Controller\AbstractController;
 use Core\Helper\Utils as Helper;
-use Voice\Model\Script as VoiceScriptModel;
-use Voice\Transformer\Script as VoiceScriptTransformer;
+use Voice\{
+    Model\Script as VoiceScriptModel,
+    Model\ScriptCategory as VoiceScriptCategoryModel,
+    Transformer\Script as VoiceScriptTransformer
+};
 
 /**
  * @RoutePrefix("/v1/scripts")
@@ -17,18 +20,19 @@ class ScriptController extends AbstractController
     private $allowedFormat = ['txt'];
 
     /**
-     * @Route("/random", methods={"GET"})
+     * @Route("/random/{vscid:[0-9]+}", methods={"GET"})
      */
-    public function randomAction()
+    public function randomAction($vscid = 0)
     {
         $sql = 'SELECT * FROM fly_voice_script AS r1 JOIN ';
         $sql .= '(SELECT CEIL(RAND() * (SELECT MAX(vs_id) FROM fly_voice_script)) AS id) AS r2 ';
-        $sql .= 'WHERE r1.vs_id >= r2.id AND r1.vs_status = 1 ORDER BY r1.vs_id ASC LIMIT 1';
+        $sql .= 'WHERE r1.vs_id >= r2.id AND r1.vs_status = 1 AND r1.vsc_id = ' . (int) $vscid . ' ORDER BY r1.vs_id ASC LIMIT 1';
         $raw = $this->getDI()->get('db')->fetchOne($sql);
 
         if (!empty($raw)) {
             $myVoiceScript = new VoiceScriptModel();
             $myVoiceScript->id = (int) $raw['vs_id'];
+            $myVoiceScript->vscid = (int) $raw['vsc_id'];
             $myVoiceScript->command = (string) $raw['vs_command'];
             $myVoiceScript->text = (string) $raw['vs_text'];
             $myVoiceScript->status = (int) $raw['vs_status'];
@@ -130,6 +134,7 @@ class ScriptController extends AbstractController
     public function importAction()
     {
         $countSuccess = 0;
+        $selectedCategoryId = (int) $this->request->getPost('categoryId', null, 0);
 
         if ($this->request->hasFiles(true)) {
             foreach ($this->request->getUploadedFiles() as $file) {
@@ -159,6 +164,7 @@ class ScriptController extends AbstractController
                         if (!$myVoiceScript) {
                             $myVoiceScript = new VoiceScriptModel();
                             $myVoiceScript->assign([
+                                'vscid' => (int) $selectedCategoryId,
                                 'command' => (string) $scriptName,
                                 'text' => (string) $scriptContent,
                                 'status' => (int) VoiceScriptModel::STATUS_ENABLE
@@ -276,7 +282,8 @@ class ScriptController extends AbstractController
     public function formsourceAction()
     {
         return $this->respondWithArray([
-            'statusList' => VoiceScriptModel::getStatusList()
+            'statusList' => VoiceScriptModel::getStatusList(),
+            'voicescriptcategoryList' => VoiceScriptCategoryModel::find()
         ], 'data');
     }
 

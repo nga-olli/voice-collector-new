@@ -9,6 +9,7 @@ use Phalcon\Validation\Validator\Uniqueness;
 /**
  * @Source('fly_voice_script_category');
  * @Behavior('\Shirou\Behavior\Model\Timestampable');
+ * @HasMany('id', '\Voice\Model\Script', 'vscid', {'alias': 'scripts'})
  */
 class ScriptCategory extends AbstractModel
 {

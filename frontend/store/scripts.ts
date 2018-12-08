@@ -69,7 +69,9 @@ export const actions = {
 
   async import({ commit }, { formData }) {
     let data = new FormData();
-    formData.map((item, index) => {
+    data.append('categoryId', formData.categoryId);
+
+    formData.files.map((item, index) => {
       data.append(`files[${index}][value]`, item.raw);
     })
 
