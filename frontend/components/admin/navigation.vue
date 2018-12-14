@@ -8,6 +8,7 @@ en:
   script: Script
   reward: Reward
   type: Type & Attributes
+  category: Category
   job: Job
 vi:
   dashboard: Tổng quan
@@ -16,6 +17,7 @@ vi:
   script: Script
   reward: Phần thưởng
   type: Loại & thuộc tính
+  category: Category
   job: Job
 </lang>
 
@@ -51,6 +53,10 @@ vi:
       <el-menu-item index="/admin/reward">
         <i class="el-icon-fa-navicon"></i>
         {{ $t('default.list') }}
+      </el-menu-item>
+      <el-menu-item index="/admin/reward/category">
+        <i class="el-icon-fa-navicon"></i>
+        {{ $t('category') }}
       </el-menu-item>
       <el-menu-item index="/admin/reward/type">
         <i class="el-icon-fa-navicon"></i>
