@@ -55,6 +55,13 @@ vi:
         {{ $t('type') }}
       </el-menu-item>
     </el-submenu>
+    <el-submenu index="/admin/job">
+      <template slot="title">{{ $t('job') }}</template>
+      <el-menu-item index="/admin/job">
+        <i class="el-icon-fa-navicon"></i>
+        {{ $t('default.list') }}
+      </el-menu-item>
+    </el-submenu>
     <el-dropdown class="avatar-container" v-if="currentUser">
       <div class="avatar-wrapper">
         <span class="user-name">
@@ -77,27 +84,6 @@ vi:
         </el-dropdown-item>
       </el-dropdown-menu>
     </el-dropdown>
-    <div class="locale-container">
-      <el-dropdown @command="onChangeLocale">
-        <span class="el-dropdown-link">
-          <span v-if="$i18n.locale === 'vi'">
-            <span class="flag-icon flag-icon-vn"></span> Tiếng Việt
-          </span>
-          <span v-else>
-            <span class="flag-icon flag-icon-us"></span> English
-          </span>
-          <i class="el-icon-arrow-down el-icon--right"></i>
-        </span>
-        <el-dropdown-menu slot="dropdown">
-          <el-dropdown-item command="en">
-            <span class="flag-icon flag-icon-us"></span> English
-          </el-dropdown-item>
-          <el-dropdown-item command="vi">
-            <span class="flag-icon flag-icon-vn"></span> Tiếng Việt
-          </el-dropdown-item>
-        </el-dropdown-menu>
-      </el-dropdown>
-    </div>
   </el-menu>
 </template>
 

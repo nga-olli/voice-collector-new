@@ -15,6 +15,11 @@ use Core\Helper\Utils as Helper;
 class Job extends AbstractModel
 {
     /**
+    * @Column(type="integer", nullable=true, column="vsc_id")
+    */
+    public $vscid;
+
+    /**
     * @Primary
     * @Identity
     * @Column(type="integer", nullable=false, column="j_id")
@@ -52,7 +57,7 @@ class Job extends AbstractModel
     public $numberofscripts;
 
     /**
-    * @Column(type="integer", nullable=true, column="j_posted_by")
+    * @Column(type="string", nullable=true, column="j_posted_by")
     */
     public $postedby;
 
@@ -65,6 +70,11 @@ class Job extends AbstractModel
     * @Column(type="string", nullable=true, column="j_cover")
     */
     public $cover;
+
+    /**
+    * @Column(type="integer", nullable=true, column="j_is_validate")
+    */
+    public $isvalidate;
 
     /**
     * @Column(type="integer", nullable=true, column="j_date_created")
@@ -83,6 +93,9 @@ class Job extends AbstractModel
 
     const STATUS_ENABLE = 1;
     const STATUS_DISABLE = 3;
+    const TYPE_RECORDING = 1;
+    const IS_VALIDATE = 1;
+    const IS_NOT_VALIDATE = 3;
 
     /**
      * Initialize model
@@ -112,6 +125,7 @@ class Job extends AbstractModel
             ];
 
             $this->addBehavior(new Fileable([
+                'beforeCreate' => $configBehavior,
                 'beforeDelete' => $configBehavior
             ]));
         }
@@ -170,6 +184,20 @@ class Job extends AbstractModel
                 'value' => (string) self::STATUS_DISABLE
             ],
         ];
+    }
+
+    public function getTypeName(): string
+    {
+        $name = '';
+        $lang = self::getStaticDi()->get('lang');
+
+        switch ($this->type) {
+            case self::TYPE_RECORDING:
+                $name = $lang->_('label-type-recording');
+                break;
+        }
+
+        return $name;
     }
 
     public function getStatusStyle(): string

@@ -8,6 +8,7 @@ use Job\{
     Model\Job as JobModel,
     Transformer\Job as JobTransformer
 };
+use Voice\Model\ScriptCategory as VoiceScriptCategoryModel;
 
 /**
  * @RoutePrefix("/v1/jobs")
@@ -97,32 +98,37 @@ class IndexController extends AbstractController
         );
     }
 
-    // /**
-    //  * @Route("/", methods={"POST"})
-    //  */
-    // public function addAction()
-    // {
-    //     $formData = (array) $this->request->getJsonRawBody();
+    /**
+     * @Route("/", methods={"POST"})
+     */
+    public function addAction()
+    {
+        $postForm = (array) $this->request->getPost('form');
+        $formData = (array) json_decode($postForm[0]);
 
-    //     $myUser = new UserModel();
-    //     $myUser->email = (string) $formData['email'];
-    //     $myUser->fullname = (string) $formData['fullname'];
-    //     $myUser->groupid = (string) $formData['groupid'];
-    //     $myUser->password = (string) $this->security->hash($formData['password']);
-    //     $myUser->status = (int) $formData['status'];
-    //     $myUser->verifytype = (int) $formData['verifytype'];
-    //     $myUser->isverified = UserModel::IS_VERIFIED;
+        $myJob = new JobModel();
+        $myJob->name = (string) $formData['name'];
+        $myJob->description = (string) $formData['description'];
+        $myJob->isvalidate = (int) $formData['isvalidate'];
+        $myJob->maxcoinreward = (int) $formData['maxcoinreward'];
+        $myJob->numberofscripts = (int) $formData['numberofscripts'];
+        $myJob->postedby = (string) $formData['postedby'];
+        $myJob->requiredid = (int) $formData['requiredid'];
+        $myJob->status = (int) $formData['status'];
+        $myJob->vscid = (int) $formData['vscid'];
+        $myJob->type = JobModel::TYPE_RECORDING;
+        $myJob->dateexpired = (int) strtotime($formData['dateexpired']);
 
-    //     if (!$myUser->create()) {
-    //         throw new UserException(ErrorCode::USER_CREATE_FAIL);
-    //     }
+        if (!$myJob->create()) {
+            throw new UserException(ErrorCode::DATA_CREATE_FAIL);
+        }
 
-    //     return $this->createItem(
-    //         $myUser,
-    //         new UserTransformer,
-    //         'response'
-    //     );
-    // }
+        return $this->createItem(
+            $myJob,
+            new JobTransformer,
+            'response'
+        );
+    }
 
     // /**
     //  * @Route("/{id:[0-9]+}", methods={"PUT"})
@@ -258,15 +264,14 @@ class IndexController extends AbstractController
     //     );
     // }
 
-    // /**
-    //  * @Route("/formsource", methods={"GET"})
-    //  */
-    // public function formsourceAction()
-    // {
-    //     return $this->respondWithArray([
-    //         'groupList' => UserModel::getGroupList(),
-    //         'statusList' => UserModel::getStatusList(),
-    //         'verifyList' => UserModel::getVerifyList(),
-    //     ], 'data');
-    // }
+    /**
+     * @Route("/formsource", methods={"GET"})
+     */
+    public function formsourceAction()
+    {
+        return $this->respondWithArray([
+            'statusList' => JobModel::getStatusList(),
+            'voicescriptcategoryList' => VoiceScriptCategoryModel::find()
+        ], 'data');
+    }
 }

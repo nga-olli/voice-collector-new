@@ -31,6 +31,16 @@ class Job extends TransformerAbstract
             'cover' => (string) $job->cover,
             'postedby' => (string) $job->postedby,
             'requiredid' => (string) $job->requiredid,
+            'vscid' => (string) $job->vscid,
+            'status' =>  [
+                'label' => (string) $job->getStatusName(),
+                'value' => (string) $job->status,
+                'style' => (string) $job->getStatusStyle()
+            ],
+            'type' => [
+                'label' => (string) $job->getTypeName(),
+                'value' => (string) $job->type
+            ],
             'datecreated' => [
                 'readable' => (string) (new Moment($job->datecreated))->format('d/m/Y'),
                 'timestamp' => (string) $job->datecreated
