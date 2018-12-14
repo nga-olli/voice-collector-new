@@ -93,6 +93,7 @@ class Job extends AbstractModel
 
     const STATUS_ENABLE = 1;
     const STATUS_DISABLE = 3;
+    const STATUS_EXPIRED = 5;
     const TYPE_RECORDING = 1;
     const IS_VALIDATE = 1;
     const IS_NOT_VALIDATE = 3;

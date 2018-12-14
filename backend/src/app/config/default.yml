@@ -11,6 +11,7 @@ modules:
   user
   job
   voice
+  reward
 annotationsDir: /app/storage/cache/annotations/
 metaDataDir: /app/storage/cache/metadata/
 cache:

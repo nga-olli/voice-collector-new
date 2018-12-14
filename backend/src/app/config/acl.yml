@@ -20,6 +20,9 @@ groups:
     Voice:
       v1:index|*
       v1:script|*
+    Reward:
+      v1:index|*
+      v1:category|*
   member:
     User:
       v1:index|updatepassword

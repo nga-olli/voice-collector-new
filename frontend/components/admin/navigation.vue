@@ -6,15 +6,17 @@ en:
   user: User
   voice: Voice
   script: Script
-  gift: Gift
+  reward: Reward
   type: Type & Attributes
+  job: Job
 vi:
   dashboard: Tổng quan
   user: Thành viên
   voice: Thu âm
   script: Script
-  gift: Quà tặng
+  reward: Phần thưởng
   type: Loại & thuộc tính
+  job: Job
 </lang>
 
 <template>
@@ -44,13 +46,13 @@ vi:
         {{ $t('script') }}
       </el-menu-item>
     </el-submenu>
-    <el-submenu index="/admin/gift">
-      <template slot="title">{{ $t('gift') }}</template>
-      <el-menu-item index="/admin/gift">
+    <el-submenu index="/admin/reward">
+      <template slot="title">{{ $t('reward') }}</template>
+      <el-menu-item index="/admin/reward">
         <i class="el-icon-fa-navicon"></i>
         {{ $t('default.list') }}
       </el-menu-item>
-      <el-menu-item index="/admin/gift/type">
+      <el-menu-item index="/admin/reward/type">
         <i class="el-icon-fa-navicon"></i>
         {{ $t('type') }}
       </el-menu-item>

@@ -3,10 +3,32 @@
     <el-table :data="jobs" style="width: 100%" row-key="id"
       @selection-change="onSelectionChange">
       <el-table-column type="selection"></el-table-column>
-      <el-table-column :label="$t('label.name')" prop="name" width="100"
-        :show-overflow-tooltip="true">
+      <el-table-column label="#" prop="id" width="50">
       </el-table-column>
-      
+      <el-table-column label="Name" prop="name">
+      </el-table-column>
+      <el-table-column label="Type">
+        <template slot-scope="scope">
+          <small>{{ scope.row.type.label }}</small>
+        </template>
+      </el-table-column>
+      <el-table-column label="Reward" prop="maxcoinreward">
+      </el-table-column>
+      <el-table-column label="Date created">
+        <template slot-scope="scope">
+          <small>{{ scope.row.datecreated.readable }}</small>
+        </template>
+      </el-table-column>
+      <el-table-column label="Date expired">
+        <template slot-scope="scope">
+          <small>{{ scope.row.dateexpired.readable }}</small>
+        </template>
+      </el-table-column>
+      <el-table-column label="Status">
+         <template slot-scope="scope">
+          <el-tag type="primary">{{ scope.row.status.label }}</el-tag>
+        </template>
+      </el-table-column>
       <el-table-column class-name="td-operation" width="130">
         <template slot-scope="scope">
           <el-button-group class="operation">
@@ -40,7 +62,7 @@ import DeleteButton from "~/components/admin/delete-button.vue";
     // EditForm
   }
 })
-export default class AdminScriptItems extends Vue {
+export default class AdminJobItems extends Vue {
   @Prop() jobs: any[];
   @Action('jobs/bulk') bulkAction;
   @Action('jobs/get_all') listAction;
