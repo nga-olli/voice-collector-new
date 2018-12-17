@@ -1,5 +1,5 @@
 <?php
-namespace Gift\Model;
+namespace Reward\Model;
 
 use Core\Model\AbstractModel;
 use Phalcon\Validation;
@@ -10,7 +10,7 @@ use Core\Helper\Utils as Helper;
 /**
  * @Source('fly_gift_stock');
  * @Behavior('\Shirou\Behavior\Model\Timestampable');
- * @HasOne('gaid', '\Gift\Model\GiftAttribute', 'id', {'alias': 'attribute'})
+ * @HasOne('gaid', '\Reward\Model\GiftAttribute', 'id', {'alias': 'attribute'})
  */
 class GiftStock extends AbstractModel
 {

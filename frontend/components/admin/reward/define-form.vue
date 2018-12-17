@@ -26,6 +26,9 @@
                   <el-option label="Manual" value="3"></el-option>
                 </el-select>
               </el-form-item>
+              <el-form-item prop="description" label="Description">
+                <el-input type="textarea" v-model="form.description" autosize :autosize="{ minRows: 6, maxRows: 8}"></el-input>
+              </el-form-item>
             </el-col>
           </el-row>
           <el-row>
@@ -121,6 +124,7 @@ export default class DefineTypeForm extends Vue {
   loading: boolean = false;
   form: any = {
     name: '',
+    description: '',
     cost: '',
     lowstockthreshold: '',
     delivery: '1',

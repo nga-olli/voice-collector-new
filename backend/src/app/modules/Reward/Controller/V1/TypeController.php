@@ -85,9 +85,12 @@ class TypeController extends AbstractController
 
         $myGiftType = new GiftTypeModel();
         $myGiftType->name = $formData['name'];
+        $myGiftType->description = $formData['description'];
         $myGiftType->cost = $formData['cost'];
         $myGiftType->lowstockthreshold = $formData['lowstockthreshold'];
         $myGiftType->status = (int) GiftTypeModel::STATUS_DISABLE;
+        $myGiftType->deliverytype = (int) $formData['delivery'];
+        $myGiftType->lowstockthreshold = (int) $formData['lowstockthreshold'];
 
         if (!$myGiftType->create()) {
             throw new UserException(ErrorCode::DATA_CREATE_FAIL);
@@ -101,7 +104,9 @@ class TypeController extends AbstractController
                     'name' => (string) $attr->name,
                     'unit' => (string) $attr->unit,
                     'displayorder' => (int) $attr->order,
-                    'type' => (int) GiftAttributeModel::TYPE_INPUT
+                    'displaytype' => (int) $attr->displaytype,
+                    'type' => (int) $attr->type,
+                    'iscritical' => (int) $attr->critical
                 ]);
 
                 if (!$myGiftAttribute->create()) {

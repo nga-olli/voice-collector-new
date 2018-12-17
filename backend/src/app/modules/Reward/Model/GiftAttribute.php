@@ -1,5 +1,5 @@
 <?php
-namespace Gift\Model;
+namespace Reward\Model;
 
 use Core\Model\AbstractModel;
 use Phalcon\Validation;
@@ -10,7 +10,7 @@ use Core\Helper\Utils as Helper;
 /**
  * @Source('fly_gift_attribute');
  * @Behavior('\Shirou\Behavior\Model\Timestampable');
- * @HasOne('gtid', '\Gift\Model\GiftType', 'id', {'alias': 'type'})
+ * @HasOne('gtid', '\Reward\Model\GiftType', 'id', {'alias': 'type'})
  */
 class GiftAttribute extends AbstractModel
 {
@@ -37,6 +37,11 @@ class GiftAttribute extends AbstractModel
     public $displayorder;
 
     /**
+    * @Column(type="integer", nullable=true, column="ga_display_type")
+    */
+    public $displaytype;
+
+    /**
     * @Column(type="string", nullable=true, column="ga_unit")
     */
     public $unit;
@@ -47,9 +52,9 @@ class GiftAttribute extends AbstractModel
     public $type;
 
     /**
-    * @Column(type="integer", nullable=true, column="ga_type_value")
+    * @Column(type="integer", nullable=true, column="ga_is_critical")
     */
-    public $typevalue;
+    public $iscritical;
 
     /**
     * @Column(type="integer", nullable=true, column="ga_date_created")
@@ -63,4 +68,6 @@ class GiftAttribute extends AbstractModel
 
     const TYPE_TEXT = 1;
     const TYPE_QRCODE = 3;
+    const IS_CRITICAL = 1;
+    const IS_NOT_CRITICAL = 3;
 }

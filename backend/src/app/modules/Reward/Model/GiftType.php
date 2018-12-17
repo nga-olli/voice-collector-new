@@ -1,5 +1,5 @@
 <?php
-namespace Gift\Model;
+namespace Reward\Model;
 
 use Core\Model\AbstractModel;
 use Phalcon\Validation;
@@ -10,8 +10,8 @@ use Core\Helper\Utils as Helper;
 /**
  * @Source('fly_gift_type');
  * @Behavior('\Shirou\Behavior\Model\Timestampable');
- * @HasMany('id', '\Gift\Model\GiftAttribute', 'gtid', {'alias': 'attributes'})
- * @HasMany('id', '\Gift\Model\Gift', 'gtid', {'alias': 'gifts'})
+ * @HasMany('id', '\Reward\Model\GiftAttribute', 'gtid', {'alias': 'attributes'})
+ * @HasMany('id', '\Reward\Model\Gift', 'gtid', {'alias': 'gifts'})
  */
 class GiftType extends AbstractModel
 {
@@ -33,6 +33,11 @@ class GiftType extends AbstractModel
     public $name;
 
     /**
+    * @Column(type="string", nullable=true, column="gt_description")
+    */
+    public $description;
+
+    /**
     * @Column(type="integer", nullable=true, column="gt_status")
     */
     public $status;
@@ -45,12 +50,12 @@ class GiftType extends AbstractModel
     /**
     * @Column(type="integer", nullable=true, column="gt_delivery_type")
     */
-    public $delivery_type;
+    public $deliverytype;
 
     /**
     * @Column(type="integer", nullable=true, column="gt_low_stock_threshold")
     */
-    public $low_stock_threshold;
+    public $lowstockthreshold;
 
     /**
     * @Column(type="integer", nullable=true, column="gt_date_created")
