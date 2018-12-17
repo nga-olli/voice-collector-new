@@ -58,7 +58,7 @@ vi:
         <i class="el-icon-fa-navicon"></i>
         {{ $t('category') }}
       </el-menu-item>
-      <el-menu-item index="/admin/reward/type">
+      <el-menu-item index="/admin/reward/define">
         <i class="el-icon-fa-navicon"></i>
         {{ $t('type') }}
       </el-menu-item>

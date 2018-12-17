@@ -67,52 +67,48 @@ export const actions = {
       .then(res => commit("SET_FORM_SOURCE", res));
   },
 
-  async bulk({ commit }, { formData }) {
-    return await this.$axios.$post(`/v1/gifttypes/bulk`, formData);
-  },
-
   async add({ commit }, { formData }) {
-    return await this.$axios.$post(`/v1/gifttypes`, formData);
+    await this.$axios.$post(`/v1/rewardtypes`, formData);
   },
 
   async get({ commit }, { id }) {
-    return await this.$axios.$get(`/v1/gifttypes/${id}`);
+    return await this.$axios.$get(`/v1/rewardtypes/${id}`);
   },
 
   async update({ commit }, { id, formData }) {
     return await this.$axios
-      .$put(`/v1/gifttypes/${id}`, formData)
+      .$put(`/v1/rewardtypes/${id}`, formData)
       .then(res => commit("UPDATE_DATA", res.data));
   },
 
   async delete({ commit }, { id }) {
     return await this.$axios
-      .$delete(`/v1/gifttypes/${id}`)
+      .$delete(`/v1/rewardtypes/${id}`)
       .then(res => commit("DELETE_DATA", res.data));
   },
 
   async get_attrs({ commit }, { id }) {
     return await this.$axios
-      .$get(`/v1/gifttypes/${id}/attrs`)
+      .$get(`/v1/rewardtypes/${id}/attrs`)
       .then(res => commit("SET_ATTRS", res));
   },
 
   async update_field({ commit }, formData) {
-    await this.$axios.$put(`/v1/gifttypes/${formData.id}/field`, formData);
+    await this.$axios.$put(`/v1/rewardtypes/${formData.id}/field`, formData);
   },
 
   async change_status({ commit }, formData) {
-    await this.$axios.$put(`/v1/gifttypes/${formData.id}/status`, formData);
+    await this.$axios.$put(`/v1/rewardtypes/${formData.id}/status`, formData);
   },
 
   async update_attr_field({ commit }, formData) {
     await this.$axios.$put(
-      `/v1/gifttypes/${formData.id}/attr_field`,
+      `/v1/rewardtypes/${formData.id}/attr_field`,
       formData
     );
   },
 
   async delete_attr({ commit }, { id }) {
-    return await this.$axios.$delete(`/v1/gifttypes/${id}/attr`);
+    return await this.$axios.$delete(`/v1/rewardtypes/${id}/attr`);
   }
 };

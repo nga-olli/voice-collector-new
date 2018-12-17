@@ -4,14 +4,15 @@ import Router from 'vue-router'
 Vue.use(Router)
 
 const _37680cd6 = () => import('../pages/admin/index.vue' /* webpackChunkName: "pages/admin/index" */).then(m => m.default || m)
-const _a33aeb8c = () => import('../pages/admin/user/index.vue' /* webpackChunkName: "pages/admin/user/index" */).then(m => m.default || m)
-const _2941d0b0 = () => import('../pages/admin/login/index.vue' /* webpackChunkName: "pages/admin/login/index" */).then(m => m.default || m)
-const _99b6e1f8 = () => import('../pages/admin/job/index.vue' /* webpackChunkName: "pages/admin/job/index" */).then(m => m.default || m)
 const _58ad3a3a = () => import('../pages/admin/script/index.vue' /* webpackChunkName: "pages/admin/script/index" */).then(m => m.default || m)
+const _a33aeb8c = () => import('../pages/admin/user/index.vue' /* webpackChunkName: "pages/admin/user/index" */).then(m => m.default || m)
+const _99b6e1f8 = () => import('../pages/admin/job/index.vue' /* webpackChunkName: "pages/admin/job/index" */).then(m => m.default || m)
+const _2941d0b0 = () => import('../pages/admin/login/index.vue' /* webpackChunkName: "pages/admin/login/index" */).then(m => m.default || m)
+const _5366f55c = () => import('../pages/admin/user/logout.vue' /* webpackChunkName: "pages/admin/user/logout" */).then(m => m.default || m)
 const _40e60e89 = () => import('../pages/admin/user/add.vue' /* webpackChunkName: "pages/admin/user/add" */).then(m => m.default || m)
+const _45d717c2 = () => import('../pages/admin/reward/define.vue' /* webpackChunkName: "pages/admin/reward/define" */).then(m => m.default || m)
 const _0f16bdd3 = () => import('../pages/admin/job/add.vue' /* webpackChunkName: "pages/admin/job/add" */).then(m => m.default || m)
 const _8a45d4da = () => import('../pages/admin/user/changepassword.vue' /* webpackChunkName: "pages/admin/user/changepassword" */).then(m => m.default || m)
-const _5366f55c = () => import('../pages/admin/user/logout.vue' /* webpackChunkName: "pages/admin/user/logout" */).then(m => m.default || m)
 const _15982c96 = () => import('../pages/index.vue' /* webpackChunkName: "pages/index" */).then(m => m.default || m)
 
 
@@ -78,14 +79,14 @@ export function createRouter () {
 			name: "admin"
 		},
 		{
+			path: "/admin/script",
+			component: _58ad3a3a,
+			name: "admin-script"
+		},
+		{
 			path: "/admin/user",
 			component: _a33aeb8c,
 			name: "admin-user"
-		},
-		{
-			path: "/admin/login",
-			component: _2941d0b0,
-			name: "admin-login"
 		},
 		{
 			path: "/admin/job",
@@ -93,14 +94,24 @@ export function createRouter () {
 			name: "admin-job"
 		},
 		{
-			path: "/admin/script",
-			component: _58ad3a3a,
-			name: "admin-script"
+			path: "/admin/login",
+			component: _2941d0b0,
+			name: "admin-login"
+		},
+		{
+			path: "/admin/user/logout",
+			component: _5366f55c,
+			name: "admin-user-logout"
 		},
 		{
 			path: "/admin/user/add",
 			component: _40e60e89,
 			name: "admin-user-add"
+		},
+		{
+			path: "/admin/reward/define",
+			component: _45d717c2,
+			name: "admin-reward-define"
 		},
 		{
 			path: "/admin/job/add",
@@ -111,11 +122,6 @@ export function createRouter () {
 			path: "/admin/user/changepassword",
 			component: _8a45d4da,
 			name: "admin-user-changepassword"
-		},
-		{
-			path: "/admin/user/logout",
-			component: _5366f55c,
-			name: "admin-user-logout"
 		},
 		{
 			path: "/",
