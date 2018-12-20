@@ -2,16 +2,21 @@
   <el-row>
     <el-col :span="24">
       <div class="filter-icon"><i class="el-icon-fa-gift"></i></div>
-      <breadcrumb :data="[
+      <!-- <breadcrumb :data="[
         { name: $t('page.index.title'), link: '/admin/reward' },
         { name: $t('default.list'), link: '' }
       ]" :totalItems="totalItems">
+      </breadcrumb> -->
+      <breadcrumb :data="[
+        { name: $t('page.index.title'), link: '/admin/reward' },
+        { name: $t('default.list'), link: '' }
+      ]">
       </breadcrumb>
       <div class="top-right-toolbar">
         <el-button size="mini" type="text" icon="el-icon-plus" @click="onShowAddForm">
           {{ $t('default.add') }}
         </el-button>
-        <pagination :totalItems="totalItems" :currentPage="query.page" :recordPerPage="recordPerPage"></pagination>
+        <!-- <pagination :totalItems="totalItems" :currentPage="query.page" :recordPerPage="recordPerPage"></pagination> -->
       </div>
     </el-col>
     <el-col :span="24">
@@ -32,7 +37,7 @@ import { Action, State } from 'vuex-class';
 import Breadcrumb from '~/components/admin/breadcrumb.vue';
 import Pagination from '~/components/admin/pagination.vue';
 // import AdminGiftItems from '~/components/admin/gift/items.vue';
-import FilterBar from '~/components/admin/reward/filter-bar.vue';
+// import FilterBar from '~/components/admin/reward/filter-bar.vue';
 import AddForm from '~/components/admin/reward/add-form.vue';
 
 @Component({
@@ -41,7 +46,7 @@ import AddForm from '~/components/admin/reward/add-form.vue';
   components: {
     Breadcrumb,
     Pagination,
-    FilterBar,
+    // FilterBar,
     // AdminGiftItems,
     AddForm
   }
@@ -52,8 +57,8 @@ export default class AdminGiftPage extends Vue {
 //   @State(state => state.gifts.totalItems) totalItems;
 //   @State(state => state.gifts.recordPerPage) recordPerPage;
 //   @State(state => state.gifts.query) query;
-  @Watch('$route')
-  onPageChange() { this.initData() }
+  // @Watch('$route')
+  // onPageChange() { this.initData() }
 
   loading: boolean = false;
   defineFormVisible: boolean = false;
@@ -71,7 +76,7 @@ export default class AdminGiftPage extends Vue {
   created() { this.initData(); }
 
   async initData() {
-    this.loading = true;
+    // this.loading = true;
 
     // return await this.listAction({ query: this.$route.query })
     //   .then(() => {

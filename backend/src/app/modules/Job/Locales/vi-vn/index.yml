@@ -1,3 +1,6 @@
 ---
 
 message-delete-user-success: Job ID %id% was deleted successfully.
+label-type-recording: Recording
+label-status-enable: Enabled
+label-status-disable: Disabled

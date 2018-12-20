@@ -54,7 +54,7 @@ export const mutations = {
 
 export const actions = {
   async get_all({ commit }, { query }) {
-    return await this.$axios.$get(`/v1/gifts`, {
+    return await this.$axios.$get(`/v1/rewards`, {
       params: query
     }).then(res => {
       commit('SET_DATA', res)
@@ -63,12 +63,12 @@ export const actions = {
   },
 
   async get_form_source({ commit }) {
-    return await this.$axios.$get(`/v1/gifts/formsource`)
+    return await this.$axios.$get(`/v1/rewards/formsource`)
       .then(res => commit('SET_FORM_SOURCE', res));
   },
 
   async bulk({ commit }, { formData }) {
-    return await this.$axios.$post(`/v1/gifts/bulk`, formData);
+    return await this.$axios.$post(`/v1/rewards/bulk`, formData);
   },
 
   async add({ commit }, { formData }) {
@@ -81,26 +81,26 @@ export const actions = {
     data.append('requiredpoint', formData.requiredpoint);
     data.append('type', formData.type);
 
-    return await this.$axios.$post(`/v1/gifts`, data)
+    return await this.$axios.$post(`/v1/rewards`, data)
       .then(res => commit('UPDATE_ITEMS', res.data));
   },
 
   async get({ commit }, { id }) {
-    return await this.$axios.$get(`/v1/gifts/${id}`);
+    return await this.$axios.$get(`/v1/rewards/${id}`);
   },
 
   async update({ commit }, { id, formData }) {
-    return await this.$axios.$put(`/v1/gifts/${id}`, formData)
+    return await this.$axios.$put(`/v1/rewards/${id}`, formData)
       .then(res => commit('UPDATE_DATA', res.data));
   },
 
   async clone({ commit }, { id, formData }) {
-    return await this.$axios.$post(`/v1/gifts/${id}/clone`, formData)
+    return await this.$axios.$post(`/v1/rewards/${id}/clone`, formData)
       .then(res => commit('UPDATE_ITEMS', res.data));
   },
 
   async delete({ commit }, { id }) {
-    return await this.$axios.$delete(`/v1/gifts/${id}`)
+    return await this.$axios.$delete(`/v1/rewards/${id}`)
       .then(res => commit('DELETE_DATA', res.data));
   }
 }

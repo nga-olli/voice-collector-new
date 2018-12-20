@@ -67,8 +67,14 @@ export const actions = {
       .then(res => commit("SET_FORM_SOURCE", res));
   },
 
-  async add({ commit }, { formData }) {
-    await this.$axios.$post(`/v1/rewardtypes`, formData);
+  async add({ commit }, { formData, covers }) {
+    let data = new FormData();
+
+    data.append('form', JSON.stringify(formData));
+    covers.map((item, index) => {
+      data.append(`files[${index}][value]`, item.raw);
+    })
+    await this.$axios.$post(`/v1/rewardtypes`, data);
   },
 
   async get({ commit }, { id }) {

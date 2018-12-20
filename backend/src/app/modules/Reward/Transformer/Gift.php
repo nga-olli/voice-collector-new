@@ -29,13 +29,6 @@ class Gift extends TransformerAbstract
             'name' => (string) $gift->name,
             'description' => (string) $gift->description,
             'displayorder' => (string) $gift->displayorder,
-            'requiredpoint' => (string) $gift->requiredpoint,
-            'cover' => (string) $gift->getCoverPath(),
-            'isused' =>  [
-                'label' => (string) $gift->getUsedName(),
-                'value' => (string) $gift->isused,
-                'style' => (string) $gift->getUsedStyle()
-            ],
             'datecreated' => (string) $gift->datecreated,
             'humandatecreated' => (string) $humandatecreated->format('d-m-Y, H:i'),
             'dateused' => (string) $gift->dateused,

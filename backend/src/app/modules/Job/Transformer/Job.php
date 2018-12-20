@@ -28,10 +28,11 @@ class Job extends TransformerAbstract
             'description' => (string) $job->description,
             'maxcoinreward' => (string) $job->maxcoinreward,
             'numberofscripts' => (string) $job->numberofscripts,
-            'cover' => (string) $job->cover,
+            'cover' => (string) $job->getCoverJson(),
             'postedby' => (string) $job->postedby,
             'requiredid' => (string) $job->requiredid,
             'vscid' => (string) $job->vscid,
+            'isvalidate' => (string) $job->isvalidate,
             'status' =>  [
                 'label' => (string) $job->getStatusName(),
                 'value' => (string) $job->status,

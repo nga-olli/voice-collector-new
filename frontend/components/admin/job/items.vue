@@ -9,10 +9,13 @@
       </el-table-column>
       <el-table-column label="Type">
         <template slot-scope="scope">
-          <small>{{ scope.row.type.label }}</small>
+          <el-tag size="mini" type="primary">{{ scope.row.type.label }}</el-tag>
         </template>
       </el-table-column>
-      <el-table-column label="Reward" prop="maxcoinreward">
+      <el-table-column label="Reward">
+        <template slot-scope="scope">
+          <el-badge :value="scope.row.maxcoinreward"></el-badge>
+        </template>
       </el-table-column>
       <el-table-column label="Date created">
         <template slot-scope="scope">
@@ -26,7 +29,7 @@
       </el-table-column>
       <el-table-column label="Status">
          <template slot-scope="scope">
-          <el-tag type="primary">{{ scope.row.status.label }}</el-tag>
+          <el-tag type="primary" size="mini">{{ scope.row.status.label }}</el-tag>
         </template>
       </el-table-column>
       <el-table-column class-name="td-operation" width="130">
@@ -54,12 +57,12 @@
 import { Vue, Component, Prop } from "nuxt-property-decorator";
 import { Action } from 'vuex-class';
 import DeleteButton from "~/components/admin/delete-button.vue";
-// import EditForm from '~/components/admin/script/edit-form.vue';
+import EditForm from '~/components/admin/job/edit-form.vue';
 
 @Component({
   components: {
     DeleteButton,
-    // EditForm
+    EditForm
   }
 })
 export default class AdminJobItems extends Vue {

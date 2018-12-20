@@ -127,7 +127,8 @@ class Job extends AbstractModel
 
             $this->addBehavior(new Fileable([
                 'beforeCreate' => $configBehavior,
-                'beforeDelete' => $configBehavior
+                'beforeDelete' => $configBehavior,
+                'beforeUpdate' => $configBehavior
             ]));
         }
     }

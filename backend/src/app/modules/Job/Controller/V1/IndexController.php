@@ -37,14 +37,14 @@ class IndexController extends AbstractController
         $keyword = (string) $this->request->getQuery('keyword', null, '');
 
         // optional Filter
-        // $status = (int) $this->request->getQuery('status', null, 0);
+        $status = (int) $this->request->getQuery('status', null, 0);
 
         $formData['columns'] = '*';
         $formData['conditions'] = [
             'keyword' => $keyword,
             'searchKeywordIn' => $searchKeywordInData,
             'filterBy' => [
-                // 'status' => $status,
+                'status' => $status,
             ]
         ];
         $formData['orderBy'] = $orderBy;
@@ -117,7 +117,7 @@ class IndexController extends AbstractController
         $myJob->status = (int) $formData['status'];
         $myJob->vscid = (int) $formData['vscid'];
         $myJob->type = JobModel::TYPE_RECORDING;
-        $myJob->dateexpired = (int) strtotime($formData['dateexpired']);
+        $myJob->dateexpired = (int) ($formData['dateexpired'] / 1000);
 
         if (!$myJob->create()) {
             throw new UserException(ErrorCode::DATA_CREATE_FAIL);
@@ -130,37 +130,44 @@ class IndexController extends AbstractController
         );
     }
 
-    // /**
-    //  * @Route("/{id:[0-9]+}", methods={"PUT"})
-    //  */
-    // public function updateAction(int $id = 0)
-    // {
-    //     $formData = (array) $this->request->getJsonRawBody();
+    /**
+     * @Route("/{id:[0-9]+}", methods={"POST"})
+     */
+    public function updateAction(int $id = 0)
+    {
+        $postForm = (array) $this->request->getPost('form');
+        $formData = (array) json_decode($postForm[0]);
 
-    //     $myUser = UserModel::findFirst([
-    //         'id = :id:',
-    //         'bind' => ['id' => (int) $id]
-    //     ]);
+        $myJob = JobModel::findFirst([
+            'id = :id:',
+            'bind' => ['id' => (int) $id]
+        ]);
 
-    //     if (!$myUser) {
-    //         throw new UserException(ErrorCode::DATA_NOTFOUND);
-    //     }
+        if (!$myJob) {
+            throw new UserException(ErrorCode::DATA_NOTFOUND);
+        }
 
-    //     $myUser->fullname = (string) $formData['fullname'];
-    //     $myUser->groupid = (string) $formData['groupid'];
-    //     $myUser->status = (int) $formData['status'];
-    //     $myUser->verifytype = (int) $formData['verifytype'];
+        $myJob->name = (string) $formData['name'];
+        $myJob->description = (string) $formData['description'];
+        $myJob->isvalidate = (int) $formData['isvalidate'];
+        $myJob->maxcoinreward = (int) $formData['maxcoinreward'];
+        $myJob->numberofscripts = (int) $formData['numberofscripts'];
+        $myJob->postedby = (string) $formData['postedby'];
+        $myJob->requiredid = (int) $formData['requiredid'];
+        $myJob->status = (int) $formData['status'];
+        $myJob->vscid = (int) $formData['vscid'];
+        $myJob->dateexpired = (int) ($formData['dateexpired'] / 1000);
 
-    //     if (!$myUser->update()) {
-    //         throw new UserException(ErrorCode::USER_UPDATE_FAIL);
-    //     }
+        if (!$myJob->update()) {
+            throw new UserException(ErrorCode::DATA_UPDATE_FAIL);
+        }
 
-    //     return $this->createItem(
-    //         $myUser,
-    //         new UserTransformer,
-    //         'data'
-    //     );
-    // }
+        return $this->createItem(
+            $myJob,
+            new JobTransformer,
+            'data'
+        );
+    }
 
     // /**
     //  * @Route("/bulk", methods={"POST"})
@@ -237,32 +244,32 @@ class IndexController extends AbstractController
     //     return $this->respondWithOK();
     // }
 
-    // /**
-    //  * @Route("/{id:[0-9]+}", methods={"DELETE"})
-    //  */
-    // public function deleteAction(int $id = 0)
-    // {
-    //     $myUser = UserModel::findFirst([
-    //         'id = :id:',
-    //         'bind' => [
-    //             'id' => (int) $id
-    //         ]
-    //     ]);
+    /**
+     * @Route("/{id:[0-9]+}", methods={"DELETE"})
+     */
+    public function deleteAction(int $id = 0)
+    {
+        $myJob = JobModel::findFirst([
+            'id = :id:',
+            'bind' => [
+                'id' => (int) $id
+            ]
+        ]);
 
-    //     if (!$myUser) {
-    //         throw new UserException(ErrorCode::DATA_NOTFOUND);
-    //     }
+        if (!$myJob) {
+            throw new UserException(ErrorCode::DATA_NOTFOUND);
+        }
 
-    //     if (!$myUser->delete()) {
-    //         throw new UserException(ErrorCode::DATA_DELETE_FAIL);
-    //     }
+        if (!$myJob->delete()) {
+            throw new UserException(ErrorCode::DATA_DELETE_FAIL);
+        }
 
-    //     return $this->createItem(
-    //         $myUser,
-    //         new UserTransformer,
-    //         'data'
-    //     );
-    // }
+        return $this->createItem(
+            $myJob,
+            new JobTransformer,
+            'data'
+        );
+    }
 
     /**
      * @Route("/formsource", methods={"GET"})

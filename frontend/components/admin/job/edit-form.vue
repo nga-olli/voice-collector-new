@@ -1,13 +1,14 @@
 <template>
-  <div class="panel-body">
-    <el-col :md="5" :xs="24">
-      <h2>{{ $t('info.add.description') }}</h2>
-      <p>{{ $t('info.add.extraDescription') }}</p>
-    </el-col>
-    <el-col :md="19" :xs="24">
-      <el-row :gutter="30">
-        <el-col :md="9">
-          <el-form autoComplete="on" label-position="left" :model="form" ref="addForm" size="small">
+  <el-dialog
+    :visible.sync="editFormState"
+    :before-close="onClose"
+    :lock-scroll="true"
+    v-on:open="onOpen"
+    v-on:close="onClosed">
+    <el-row>
+      <el-col :md="24" :xs="24">
+        <el-col :md="24">
+          <el-form autoComplete="on" label-position="left" :model="form" :rules="rules" ref="editForm">
             <el-form-item prop="name" label="Name">
               <el-input type="text" size="small" v-model="form.name"></el-input>
             </el-form-item>
@@ -46,61 +47,65 @@
               <el-input type="text" size="small" v-model="form.requiredid" placeholder="enter the ID of the job required to be finished before this job"></el-input>
             </el-form-item>
             <el-form-item style="margin-top: 30px">
-              <el-button type="primary" :loading="loading" @click.native.prevent="onSubmit"> {{ $t('default.add') }}
+              <el-button type="primary" :loading="loading" @click.native.prevent="onSubmit"> {{ $t('default.update') }}
               </el-button>
               <el-button @click="onReset">{{ $t('default.reset') }}</el-button>
             </el-form-item>
+            <el-form-item>
+              <el-upload
+                ref="cover"
+                action=""
+                :auto-upload="false"
+                :limit="1"
+                list-type="picture-card"
+                :on-preview="handlePictureCardPreview"
+                :on-change="onChange"
+                :on-remove="onRemove">
+                <img v-if="imageUrl" :src="imageUrl">
+                <i v-else class="el-icon-plus"></i>
+              </el-upload>
+            </el-form-item>
           </el-form>
         </el-col>
-        <el-col :md="9">
-          <el-upload
-            ref="cover"
-            action=""
-            :auto-upload="false"
-            :limit="1"
-            list-type="picture-card"
-            :on-preview="handlePictureCardPreview"
-            :on-change="onChange"
-            :on-remove="onRemove">
-            <img v-if="imageUrl" :src="imageUrl">
-            <i v-else class="el-icon-plus"></i>
-          </el-upload>
-        </el-col>
-      </el-row>
-    </el-col>
-  </div>
+      </el-col>
+    </el-row>
+  </el-dialog>
 </template>
 
 <script lang="ts">
-import { Vue, Component, Watch } from 'nuxt-property-decorator';
+import { Vue, Component, Prop } from 'nuxt-property-decorator';
 import { Action, State } from 'vuex-class';
 
 @Component
-export default class AddForm extends Vue {
+export default class EditForm extends Vue {
   @Action('jobs/get_form_source') formsourceAction;
-  @Action('jobs/add') addAction;
+  @Action('jobs/get') getAction;
+  @Action('jobs/update') updateAction;
   @State(state => state.jobs.formSource) formSource;
-  @Watch('$route')
-  onPageChange() { this.initData(); };
+
+  @Prop() itemId: number;
+  @Prop() editFormState: boolean;
+  @Prop() onClose;
 
   loading: boolean = false;
-  form: object = {
-    name: '',
-    description: '',
-    maxcoinreward: '',
-    numberofscripts: '',
-    vscid: null,
-    isvalidate: null,
-    dateexpired: null,
-    postedby: '',
-    requiredid: '',
-    status: null
-  };
+  form: object = {};
   imageUrl = '';
   myFiles: any[] = [];
 
   $refs: {
-    addForm: HTMLFormElement
+    editForm: HTMLFormElement
+  }
+
+  get rules() {
+    return {
+      name: [
+        {
+          required: true,
+          message: this.$t('msg.nameIsRequired'),
+          trigger: 'blur'
+        }
+      ]
+    };
   }
 
   onChange(file, filelist) {
@@ -115,27 +120,51 @@ export default class AddForm extends Vue {
     this.imageUrl = file.url;
   }
 
+  async onOpen() {
+    return await this.getAction({ id: this.itemId })
+      .then(res => {
+        this.form = {
+          name: res.data.name,
+          description: res.data.description,
+          maxcoinreward: res.data.maxcoinreward,
+          numberofscripts: res.data.numberofscripts,
+          vscid: res.data.vscid,
+          isvalidate: res.data.isvalidate,
+          dateexpired: parseInt(res.data.dateexpired.timestamp + '000'),
+          postedby: res.data.postedby,
+          requiredid: res.data.requiredid,
+          status: res.data.status.value,
+        };
+        this.imageUrl = res.data.cover
+      });
+  }
+
+  onClosed() {
+    this.$refs.editForm.clearValidate();
+  }
+
   onSubmit() {
-    this.$refs.addForm.validate(async valid => {
+    this.$refs.editForm.validate(async valid => {
       if (valid) {
         try {
           this.loading = true;
-          await this.addAction({
+          const res = await this.updateAction({
+            id: this.itemId,
             formData: this.form,
             covers: this.myFiles
           });
+
           this.loading = false;
-
           this.$message({
-            showClose: true,
-            message: this.$t('msg.addSuccess').toString(),
-            type: 'success',
-            duration: 3 * 1000
-          })
+              showClose: true,
+              message: this.$t('msg.updateSuccess').toString(),
+              type: 'success',
+              duration: 3 * 1000
+            })
 
-          this.$refs.addForm.resetFields();
+          return this.onClose();
         } catch (error) {
-          this.loading = false; 
+          this.loading = false;
         }
       } else {
         return false;
@@ -143,14 +172,28 @@ export default class AddForm extends Vue {
     });
   }
 
-  onReset() { return this.$refs.addForm.resetFields(); }
+  async onReset() {
+    this.$refs.editForm.resetFields();
+    await this.getAction({ id: this.itemId })
+      .then(res => {
+        this.form = {
+          name: res.data.name,
+          description: res.data.description,
+          maxcoinreward: res.data.maxcoinreward,
+          numberofscripts: res.data.numberofscripts,
+          vscid: res.data.vscid,
+          isvalidate: res.data.isvalidate,
+          dateexpired: res.data.dateexpired.timestamp,
+          postedby: res.data.postedby,
+          requiredid: res.data.requiredid,
+          status: res.data.status.value
+        };
+        this.imageUrl = res.data.cover
+      });
+  }
 
   created() { return this.initData(); }
 
   async initData() { return await this.formsourceAction() }
 }
 </script>
-
-<style>
-
-</style>

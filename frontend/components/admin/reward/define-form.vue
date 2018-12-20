@@ -30,6 +30,20 @@
                 <el-input type="textarea" v-model="form.description" autosize :autosize="{ minRows: 6, maxRows: 8}"></el-input>
               </el-form-item>
             </el-col>
+            <el-col :md="8">
+              <el-upload
+                ref="cover"
+                action=""
+                :auto-upload="false"
+                :limit="1"
+                list-type="picture-card"
+                :on-preview="handlePictureCardPreview"
+                :on-change="onChange"
+                :on-remove="onRemove">
+                <img v-if="imageUrl" :src="imageUrl">
+                <i v-else class="el-icon-plus"></i>
+              </el-upload>
+            </el-col>
           </el-row>
           <el-row>
             <el-col :md="20">
@@ -133,6 +147,8 @@ export default class DefineTypeForm extends Vue {
       { key: 1, name: '', type: '1', unit: '', order: 1, displaytype: '1', critical: '3' }
     ]
   };
+  imageUrl = '';
+  myFiles: any[] = [];
 
   $refs: {
     defineForm: HTMLFormElement
@@ -148,6 +164,18 @@ export default class DefineTypeForm extends Vue {
         }
       ]
     };
+  }
+
+  onChange(file, filelist) {
+    this.myFiles = filelist;
+  }
+
+  onRemove(file, filelist) {
+    this.myFiles = filelist;
+  }
+
+  handlePictureCardPreview(file) {
+    this.imageUrl = file.url;
   }
 
   onAddAttribute() {
@@ -176,21 +204,29 @@ export default class DefineTypeForm extends Vue {
   onSubmit() {
     this.$refs.defineForm.validate(async valid => {
       if (valid) {
-        this.loading = true;
-        await this.addAction({ formData: this.form });
+        try {
+          this.loading = true;
 
-        this.loading = false;
+          await this.addAction({
+            formData: this.form,
+            covers: this.myFiles
+          });
 
-        this.$message({
-          showClose: true,
-          message: this.$t('msg.addSuccess').toString(),
-          type: 'success',
-          duration: 3 * 1000
-        })
+          this.loading = false;
 
-        // await this.formsourceAction();
+          this.$message({
+            showClose: true,
+            message: this.$t('msg.addSuccess').toString(),
+            type: 'success',
+            duration: 3 * 1000
+          })
 
-        return this.onReset();
+          // await this.formsourceAction();
+
+          return this.onReset();
+        } catch (error) {
+          this.loading = false;
+        }
       } else {
         return false;
       }

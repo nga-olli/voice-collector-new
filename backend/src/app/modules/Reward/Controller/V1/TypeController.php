@@ -81,7 +81,8 @@ class TypeController extends AbstractController
      */
     public function addAction()
     {
-        $formData = (array) $this->request->getJsonRawBody();
+        $postForm = (array) $this->request->getPost('form');
+        $formData = (array) json_decode($postForm[0]);
 
         $myGiftType = new GiftTypeModel();
         $myGiftType->name = $formData['name'];

@@ -6,6 +6,7 @@ use Phalcon\Validation;
 use Phalcon\Validation\Validator\PresenceOf;
 use Phalcon\Validation\Validator\Uniqueness;
 use Core\Helper\Utils as Helper;
+use Shirou\Behavior\Model\Fileable;
 
 /**
  * @Source('fly_gift_type');
@@ -58,6 +59,11 @@ class GiftType extends AbstractModel
     public $lowstockthreshold;
 
     /**
+    * @Column(type="string", nullable=true, column="gt_cover")
+    */
+    public $cover;
+
+    /**
     * @Column(type="integer", nullable=true, column="gt_date_created")
     */
     public $datecreated;
@@ -94,6 +100,28 @@ class GiftType extends AbstractModel
     //
     //     return $this->validate($validator);
     // }
+
+    public function initialize()
+    {
+        $config = $this->getDI()->get('config');
+
+        if (!$this->getDI()->get('app')->isConsole()) {
+            $configBehavior = [
+                'field' => 'cover',
+                'uploadPath' => $config->default->rewards->directory,
+                'allowedFormats' => $config->default->rewards->mimes->toArray(),
+                'allowedMaximumSize' => $config->default->rewards->maxsize,
+                'allowedMinimumSize' => $config->default->rewards->minsize,
+                'isOverwrite' => $config->default->rewards->isoverwrite
+            ];
+
+            $this->addBehavior(new Fileable([
+                'beforeCreate' => $configBehavior,
+                'beforeDelete' => $configBehavior,
+                'beforeUpdate' => $configBehavior
+            ]));
+        }
+    }
 
     public function getStatusName(): string
     {

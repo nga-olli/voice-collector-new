@@ -80,8 +80,14 @@ export const state = () => ({
       return await this.$axios.$get(`/v1/jobs/${id}`);
     },
   
-    async update({ commit }, { id, formData }) {
-      return await this.$axios.$put(`/v1/jobs/${id}`, formData)
+    async update({ commit }, { id, formData, covers }) {
+      let data = new FormData();
+      data.append('form', JSON.stringify(formData));
+      covers.map((item, index) => {
+        data.append(`files[${index}][value]`, item.raw);
+      })
+
+      return await this.$axios.$post(`/v1/jobs/${id}`, data)
         .then(res => commit('UPDATE_DATA', res.data));
     },
   

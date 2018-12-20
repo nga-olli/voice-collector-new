@@ -7,15 +7,12 @@
     <el-row>
       <el-col :md="24" :xs="24">
         <el-col :md="24">
-          <el-form autoComplete="on" label-position="left" :model="form" :rules="rules" ref="addForm">
-            <el-form-item prop="name" :label="$t('label.name')">
+          <el-form autoComplete="on" label-position="left" :model="form" :rules="rules" ref="addForm" >
+            <el-form-item prop="name" label="Name">
               <el-input type="text" size="small" v-model="form.name" autofocus clearable></el-input>
             </el-form-item>
-            <el-form-item prop="requiredpoint" :label="$t('label.requiredpoint')">
-              <el-input type="number" size="small" v-model="form.requiredpoint"></el-input>
-            </el-form-item>
-            <el-form-item prop="type" :label="$t('label.type')">
-              <el-select size="small" v-model="form.type" :placeholder="$t('label.selectType')" style="width: 100%;" :loading="loading" @change="onChangeType">
+            <el-form-item prop="type" label="Type">
+              <el-select size="small" v-model="form.type" placeholder="Select reward type" style="width: 100%;" :loading="loading" @change="onChangeType">
                 <el-option v-for="item in formSource.typeList" :key="item.id" :label="item.name" :value="item.id">
                 </el-option>
               </el-select>
@@ -23,30 +20,13 @@
             <el-row v-for="(attr, index) in attrs" :key="index" :gutter="10" v-show="showAttrs">
               <el-col :md="12">
                 <el-form-item>
-                  <el-input type="textarea" autosize size="small" :placeholder="attr.name" v-on:input="onInputName(index, $event)" clearable>
-                      <template slot="append" v-if="attr.unit !== ''"><code>{{ attr.unit }}</code></template>
+                  <el-input type="text" autosize size="mini" :placeholder="attr.name" v-on:input="onInputName(index, $event)" clearable>
+                    <template slot="append" v-if="attr.unit !== ''"><code>{{ attr.unit }}</code></template>
                   </el-input>
                 </el-form-item>
               </el-col>
             </el-row>
-            <el-form-item>
-              <el-upload
-                class="cover-uploader"
-                ref="file"
-                action=""
-                accept="image/jpg,image/png,image/jpeg"
-                :multiple="false"
-                :auto-upload="false"
-                :with-credentials="true"
-                :limit="1"
-                :file-list="form.files"
-                :on-change="onChangeFile"
-                :on-remove="onRemoveFile">
-                <img v-if="form.files.length > 0" :src="coverPreview" />
-                <i v-else class="el-icon-plus cover-uploader-icon"></i>
-              </el-upload>
-            </el-form-item>
-            <el-form-item style="margin-top: 30px">
+            <el-form-item style="margin-top: 10px">
               <el-button type="primary" :loading="loading" @click.native.prevent="onSubmit"> {{ $t('default.add') }}
               </el-button>
               <el-button @click="onClose">{{ $t('default.cancel') }}</el-button>
@@ -67,8 +47,8 @@ export default class AddForm extends Vue {
   @Action('rewards/add') addAction;
   @Action('rewards/get_form_source') formsourceAction;
   @Action('rewardtypes/get_attrs') getattrsAction;
-//   @State(state => state.gifts.formSource) formSource;
-//   @State(state => state.gifttypes.attrs) attrs;
+  @State(state => state.rewards.formSource) formSource;
+  @State(state => state.rewardtypes.attrs) attrs;
   @Prop() addFormState: boolean;
   @Prop() onClose;
 
@@ -78,10 +58,8 @@ export default class AddForm extends Vue {
     name: '',
     type: null,
     requiredpoint: 1,
-    attrs: null,
-    files: []
+    attrs: null
   };
-  coverPreview: string = '';
 
   $refs: {
     addForm: HTMLFormElement
@@ -111,15 +89,6 @@ export default class AddForm extends Vue {
         }
       ]
     };
-  }
-
-  onChangeFile(file, filelist) {
-    this.form.files = filelist;
-    this.coverPreview = URL.createObjectURL(filelist[0].raw);
-  }
-
-  onRemoveFile(file, filelist) {
-    this.form.files = filelist;
   }
 
   onInputName(index, value) {

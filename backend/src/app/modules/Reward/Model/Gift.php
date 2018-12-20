@@ -5,7 +5,6 @@ use Core\Model\AbstractModel;
 use Phalcon\Validation;
 use Phalcon\Validation\Validator\PresenceOf;
 use Core\Helper\Utils as Helper;
-use Shirou\Behavior\Model\Fileable;
 use Gift\Model\GiftStock as GiftStockModel;
 
 /**
@@ -15,6 +14,11 @@ use Gift\Model\GiftStock as GiftStockModel;
  */
 class Gift extends AbstractModel
 {
+    /**
+    * @Column(type="integer", nullable=true, column="rc_id")
+    */
+    public $rcid;
+
     /**
     * @Column(type="integer", nullable=true, column="gt_id")
     */
@@ -33,29 +37,19 @@ class Gift extends AbstractModel
     public $name;
 
     /**
-    * @Column(type="string", nullable=true, column="g_description")
-    */
-    public $description;
-
-    /**
     * @Column(type="integer", nullable=true, column="g_display_order")
     */
     public $displayorder;
 
     /**
-    * @Column(type="string", nullable=true, column="g_cover")
+    * @Column(type="integer", nullable=true, column="g_status")
     */
-    public $cover;
+    public $status;
 
     /**
     * @Column(type="integer", nullable=true, column="g_is_used")
     */
     public $isused;
-
-    /**
-    * @Column(type="integer", nullable=true, column="g_required_point")
-    */
-    public $requiredpoint;
 
     /**
     * @Column(type="integer", nullable=true, column="g_date_created")
@@ -72,8 +66,9 @@ class Gift extends AbstractModel
     */
     public $dateused;
 
-    const IS_USED = 1;
-    const IS_NOT_USED = 3;
+    const STATUS_AVAILABLE = 1;
+    const STATUS_DELIVERED = 3;
+    const STATUS_PENDING_DELIVERY = 5;
 
     public function validation()
     {
@@ -87,82 +82,11 @@ class Gift extends AbstractModel
             'message' => 'message-gtid-notempty'
         ]));
 
-        $validator->add('isused', new PresenceOf([
-            'message' => 'message-isused-notempty'
+        $validator->add('rcid', new PresenceOf([
+            'message' => 'message-rcid-notempty'
         ]));
 
         return $this->validate($validator);
-    }
-
-    public function initialize()
-    {
-        $config = $this->getDI()->get('config');
-
-        if (!$this->getDI()->get('app')->isConsole()) {
-            $configBehavior = [
-                'field' => 'cover',
-                'uploadPath' => $config->default->gifts->directory,
-                'allowedFormats' => $config->default->gifts->mimes->toArray(),
-                'allowedMaximumSize' => $config->default->gifts->maxsize,
-                'allowedMinimumSize' => $config->default->gifts->minsize,
-                'isOverwrite' => $config->default->gifts->isoverwrite
-            ];
-
-            $this->addBehavior(new Fileable([
-                'beforeCreate' => $configBehavior,
-                'beforeDelete' => $configBehavior,
-                'beforeUpdate' => $configBehavior
-            ]));
-        }
-    }
-
-    public function getUsedName(): string
-    {
-        $name = '';
-        $lang = self::getStaticDi()->get('lang');
-
-        switch ($this->isused) {
-            case self::IS_USED:
-                $name = $lang->_('label-is-used');
-                break;
-            case self::IS_NOT_USED:
-                $name = $lang->_('label-is-not-used');
-                break;
-        }
-
-        return $name;
-    }
-
-    public static function getUsedList()
-    {
-        $lang = self::getStaticDi()->get('lang');
-
-        return $data = [
-            [
-                'label' => $lang->_('label-is-used'),
-                'value' => (string) self::IS_USED
-            ],
-            [
-                'label' => $lang->_('label-is-not-used'),
-                'value' => (string) self::IS_NOT_USED
-            ],
-        ];
-    }
-
-    public function getUsedStyle(): string
-    {
-        $name = '';
-
-        switch ($this->isused) {
-            case self::IS_USED:
-                $name = 'danger';
-                break;
-            case self::IS_NOT_USED:
-                $name = 'success';
-                break;
-        }
-
-        return $name;
     }
 
     public function getCoverPath(): string
@@ -173,7 +97,7 @@ class Gift extends AbstractModel
         if ($this->cover != '') {
             return Helper::getFileUrl(
                 $url->getBaseUri(),
-                $config->default->gifts->directory,
+                $config->default->rewards->directory,
                 $this->cover
             );
         } else {
@@ -181,8 +105,8 @@ class Gift extends AbstractModel
         }
     }
 
-    public function afterDelete()
-    {
-        return $this->getStocks()->delete();
-    }
+    // public function afterDelete()
+    // {
+    //     return $this->getStocks()->delete();
+    // }
 }

@@ -15,8 +15,12 @@ class GiftAttribute extends TransformerAbstract
 
         return [
             'id' => (string) $giftattribute->id,
+            'gtid' => (string) $giftattribute->gtid,
             'name' => (string) $giftattribute->name,
+            'displaytype' => (string) $giftattribute->displaytype,
             'unit' => (string) $giftattribute->unit,
+            'type' => (string) $giftattribute->type,
+            'iscritical' => (string) $giftattribute->iscritical,
             'displayorder' => (string) $giftattribute->displayorder,
             'datecreated' => (string) $giftattribute->datecreated,
             'humandatecreated' => (string) $humandatecreated->format('d-m-Y, H:i')

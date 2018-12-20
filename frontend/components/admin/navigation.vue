@@ -69,6 +69,10 @@ vi:
         <i class="el-icon-fa-navicon"></i>
         {{ $t('default.list') }}
       </el-menu-item>
+      <el-menu-item index="/admin/job/add">
+        <i class="el-icon-fa-plus"></i>
+        {{ $t('default.add') }}
+      </el-menu-item>
     </el-submenu>
     <el-dropdown class="avatar-container" v-if="currentUser">
       <div class="avatar-wrapper">
