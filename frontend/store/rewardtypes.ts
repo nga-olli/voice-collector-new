@@ -52,7 +52,7 @@ export const mutations = {
 export const actions = {
   async get_all({ commit }, { query }) {
     return await this.$axios
-      .$get(`/v1/gifttypes`, {
+      .$get(`/v1/rewardtypes`, {
         params: query
       })
       .then(res => {
@@ -63,7 +63,7 @@ export const actions = {
 
   async get_form_source({ commit }) {
     return await this.$axios
-      .$get(`/v1/gifttypes/formsource`)
+      .$get(`/v1/rewardtypes/formsource`)
       .then(res => commit("SET_FORM_SOURCE", res));
   },
 

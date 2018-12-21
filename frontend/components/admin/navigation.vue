@@ -43,6 +43,10 @@ vi:
         <i class="el-icon-fa-navicon"></i>
         {{ $t('default.list') }}
       </el-menu-item>
+       <el-menu-item index="/admin/voice/category">
+        <i class="el-icon-fa-navicon"></i>
+        {{ $t('category') }}
+      </el-menu-item>
       <el-menu-item index="/admin/script">
         <i class="el-icon-fa-text-width"></i>
         {{ $t('script') }}

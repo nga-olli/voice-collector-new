@@ -1,15 +1,15 @@
 <template>
   <el-form ref="form" label-position="top">
     <el-form-item prop="keyword">
-      <el-input size="small" :placeholder="$t('form.search')"
+      <el-input size="small" placeholder="Search"
         v-model="form.keyword"
         @keyup.enter.native="onFilter"
         clearable>
         <el-button slot="append" @click="onFilter"><i class="el-icon-fa-search"></i></el-button>
       </el-input>
     </el-form-item>
-    <el-form-item prop="status" :label="$t('form.status')">
-      <el-select clearable size="small" v-model="form.status" :placeholder="$t('default.all')">
+    <el-form-item prop="status" label="Status">
+      <el-select clearable size="small" v-model="form.status" placeholder="All">
         <el-option v-for="item in formSource.statusList" :key="item.value" :label="item.label" :value="item.value">
         </el-option>
       </el-select>

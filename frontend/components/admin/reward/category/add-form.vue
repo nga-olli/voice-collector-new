@@ -8,42 +8,27 @@
       <el-row :gutter="30">
         <el-col :md="9">
           <el-form autoComplete="on" label-position="left" :model="form" ref="addForm" size="small">
+            <el-form-item prop="parentid" label="Parent ID">
+              <el-select size="small" v-model="form.parentid" placeholder="Select category" style="width: 100%" :loading="loading">
+                <el-option label="None" :value="0"></el-option>
+                <el-option v-for="item in formSource.categoryList" :key="item.id" :label="item.name" :value="item.id">
+                </el-option>
+              </el-select>
+            </el-form-item>
             <el-form-item prop="name" label="Name">
               <el-input type="text" size="small" v-model="form.name"></el-input>
             </el-form-item>
             <el-form-item prop="description" label="Description">
               <el-input type="textarea" :autosize="{ minRows: 2, maxRows: 4}" v-model="form.description"></el-input>
             </el-form-item>
-            <el-form-item prop="maxcoinreward" label="Max coin reward">
-              <el-input type="text" size="small" v-model="form.maxcoinreward"></el-input>
-            </el-form-item>
-            <el-form-item prop="numberofscripts" label="Number of scripts">
-              <el-input type="text" size="small" v-model="form.numberofscripts"></el-input>
-            </el-form-item>
-            <el-form-item prop="vscid" label="Voice script category">
-              <el-select size="small" v-model="form.vscid" placeholder="Select" style="width: 100%" :loading="loading">
-                <el-option v-for="item in formSource.voicescriptcategoryList" :key="item.id" :label="item.name" :value="item.id">
-                </el-option>
-              </el-select>
+            <el-form-item prop="displayorder" label="Display order">
+              <el-input type="text" size="small" v-model="form.displayorder"></el-input>
             </el-form-item>
             <el-form-item prop="status" label="Status">
               <el-select size="small" v-model="form.status" placeholder="Select" style="width: 100%" :loading="loading">
                 <el-option v-for="item in formSource.statusList" :key="item.label" :label="item.label" :value="item.value">
                 </el-option>
               </el-select>
-            </el-form-item>
-            <el-form-item prop="isvalidate" label="Validation required">
-              <el-radio v-model="form.isvalidate" label="1">Yes</el-radio>
-              <el-radio v-model="form.isvalidate" label="3">No</el-radio>
-            </el-form-item>
-            <el-form-item prop="dateexpired" label="Date expired">
-              <el-date-picker type="date" format="dd/MM/yyyy" value-format="timestamp" placeholder="Pick a date" v-model="form.dateexpired" style="width: 100%;"></el-date-picker>
-            </el-form-item>
-            <el-form-item prop="postedby" label="Posted by">
-              <el-input type="text" size="small" v-model="form.postedby"></el-input>
-            </el-form-item>
-            <el-form-item prop="requiredid" label="Required Job ID">
-              <el-input type="text" size="small" v-model="form.requiredid" placeholder="enter the ID of the job required to be finished before this job"></el-input>
             </el-form-item>
             <el-form-item style="margin-top: 30px">
               <el-button type="primary" :loading="loading" @click.native.prevent="onSubmit"> {{ $t('default.add') }}
@@ -78,9 +63,9 @@ import { Action, State } from 'vuex-class';
 
 @Component
 export default class AddForm extends Vue {
-  @Action('jobs/get_form_source') formsourceAction;
-  @Action('jobs/add') addAction;
-  @State(state => state.jobs.formSource) formSource;
+  @Action('rewardcategories/get_form_source') formsourceAction;
+  @Action('rewardcategories/add') addAction;
+  @State(state => state.rewardcategories.formSource) formSource;
   @Watch('$route')
   onPageChange() { this.initData(); };
 
@@ -88,13 +73,8 @@ export default class AddForm extends Vue {
   form: object = {
     name: '',
     description: '',
-    maxcoinreward: '',
-    numberofscripts: '',
-    vscid: null,
-    isvalidate: null,
-    dateexpired: null,
-    postedby: '',
-    requiredid: '',
+    displayorder: '',
+    parentid: null,
     status: null
   };
   imageUrl = '';

@@ -2,7 +2,7 @@
   <section>
     <el-table :data="jobs" style="width: 100%" row-key="id"
       @selection-change="onSelectionChange">
-      <el-table-column type="selection"></el-table-column>
+      <!-- <el-table-column type="selection"></el-table-column> -->
       <el-table-column label="#" prop="id" width="50">
       </el-table-column>
       <el-table-column label="Name" prop="name">
@@ -29,7 +29,7 @@
       </el-table-column>
       <el-table-column label="Status">
          <template slot-scope="scope">
-          <el-tag type="primary" size="mini">{{ scope.row.status.label }}</el-tag>
+          <el-tag :type="scope.row.status.style" size="mini">{{ scope.row.status.label }}</el-tag>
         </template>
       </el-table-column>
       <el-table-column class-name="td-operation" width="130">

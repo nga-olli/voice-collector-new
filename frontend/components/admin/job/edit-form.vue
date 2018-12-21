@@ -197,3 +197,12 @@ export default class EditForm extends Vue {
   async initData() { return await this.formsourceAction() }
 }
 </script>
+
+<style lang="scss">
+.el-upload {
+  img {
+    width: 145px;
+    height: 145px;
+  }
+}
+</style>

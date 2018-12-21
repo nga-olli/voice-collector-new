@@ -20,17 +20,25 @@
               </el-form-item>
             </el-col>
             <el-col :md="8">
-              <el-form-item prop="delivery" style="margin-top: 28px">
+              <el-form-item prop="delivery" label="Delivery" label-position="top">
                 <el-select v-model="form.delivery" placeholder="Select delivery type">
                   <el-option label="Auto" value="1"></el-option>
                   <el-option label="Manual" value="3"></el-option>
                 </el-select>
               </el-form-item>
+              <el-form-item prop="category" label="Reward Category">
+                <el-select size="small" v-model="form.category" placeholder="Select">
+                  <el-option label="None" :value="0"></el-option>
+                  <el-option v-for="item in categoriesFormSource.categoryList" :key="item.id" :label="item.name" :value="item.id">
+                  </el-option>
+                </el-select>
+              </el-form-item>
               <el-form-item prop="description" label="Description">
-                <el-input type="textarea" v-model="form.description" autosize :autosize="{ minRows: 6, maxRows: 8}"></el-input>
+                <el-input type="textarea" v-model="form.description" :autosize="{ minRows: 6, maxRows: 8}"></el-input>
               </el-form-item>
             </el-col>
             <el-col :md="8">
+              <p>Cover</p>
               <el-upload
                 ref="cover"
                 action=""
@@ -127,13 +135,16 @@
 </template>
 
 <script lang="ts">
-import { Vue, Component, Prop } from 'nuxt-property-decorator';
-import { Action } from 'vuex-class';
+import { Vue, Component, Watch } from 'nuxt-property-decorator';
+import { Action, State } from 'vuex-class';
 
 @Component
 export default class DefineTypeForm extends Vue {
   @Action('rewardtypes/add') addAction;
-  // @Action('gifts/get_form_source') formsourceAction;
+  @Action('rewardcategories/get_form_source') formsourceAction;
+  @State(state => state.rewardcategories.formSource) categoriesFormSource;
+  @Watch('$route')
+  onPageChange() { this.initData(); };
 
   loading: boolean = false;
   form: any = {
@@ -142,7 +153,7 @@ export default class DefineTypeForm extends Vue {
     cost: '',
     lowstockthreshold: '',
     delivery: '1',
-    category: '1',
+    category: null,
     attrs: [
       { key: 1, name: '', type: '1', unit: '', order: 1, displaytype: '1', critical: '3' }
     ]
@@ -232,5 +243,9 @@ export default class DefineTypeForm extends Vue {
       }
     });
   }
+
+  created() { return this.initData(); }
+
+  async initData() { return await this.formsourceAction() }
 }
 </script>
