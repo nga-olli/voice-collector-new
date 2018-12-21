@@ -6,7 +6,8 @@ use Shirou\UserException;
 use Core\Controller\AbstractController;
 use Reward\{
     Model\Category as RewardCategoryModel,
-    Transformer\Category as RewardCategoryTransformer
+    Transformer\Category as RewardCategoryTransformer,
+    Transformer\Closure as RewardCategoryClosureTransformer
 };
 
 /**
@@ -76,201 +77,136 @@ class CategoryController extends AbstractController
         }
     }
 
-    // /**
-    //  * @Route("/{id:[0-9]+}", methods={"GET"})
-    //  */
-    // public function getAction(int $id = 0)
-    // {
-    //     $myJob = JobModel::findFirst([
-    //         'id = :id:',
-    //         'bind' => ['id' => (int) $id]
-    //     ]);
+    /**
+     * @Route("/{id:[0-9]+}", methods={"GET"})
+     */
+    public function getAction(int $id = 0)
+    {
+        $myRewardCategory = RewardCategoryModel::findFirst([
+            'id = :id:',
+            'bind' => ['id' => (int) $id]
+        ]);
 
-    //     if (!$myJob) {
-    //         throw new UserException(ErrorCode::DATA_NOTFOUND);
-    //     }
+        if (!$myRewardCategory) {
+            throw new UserException(ErrorCode::DATA_NOTFOUND);
+        }
 
-    //     return $this->createItem(
-    //         $myJob,
-    //         new JobTransformer,
-    //         'data'
-    //     );
-    // }
+        return $this->createItem(
+            $myRewardCategory,
+            new RewardCategoryTransformer,
+            'data'
+        );
+    }
 
-    // /**
-    //  * @Route("/", methods={"POST"})
-    //  */
-    // public function addAction()
-    // {
-    //     $postForm = (array) $this->request->getPost('form');
-    //     $formData = (array) json_decode($postForm[0]);
+    /**
+     * @Route("/", methods={"POST"})
+     */
+    public function addAction()
+    {
+        $postForm = (array) $this->request->getPost('form');
+        $formData = (array) json_decode($postForm[0]);
 
-    //     $myJob = new JobModel();
-    //     $myJob->name = (string) $formData['name'];
-    //     $myJob->description = (string) $formData['description'];
-    //     $myJob->isvalidate = (int) $formData['isvalidate'];
-    //     $myJob->maxcoinreward = (int) $formData['maxcoinreward'];
-    //     $myJob->numberofscripts = (int) $formData['numberofscripts'];
-    //     $myJob->postedby = (string) $formData['postedby'];
-    //     $myJob->requiredid = (int) $formData['requiredid'];
-    //     $myJob->status = (int) $formData['status'];
-    //     $myJob->vscid = (int) $formData['vscid'];
-    //     $myJob->type = JobModel::TYPE_RECORDING;
-    //     $myJob->dateexpired = (int) strtotime($formData['dateexpired']);
+        $myRewardCategory = new RewardCategoryModel();
+        $myRewardCategory->name = (string) $formData['name'];
+        $myRewardCategory->description = (string) $formData['description'];
+        $myRewardCategory->displayorder = (int) $formData['displayorder'];
+        $myRewardCategory->status = (int) $formData['status'];
+        $myRewardCategory->parentid = (int) $formData['parentid'];
 
-    //     if (!$myJob->create()) {
-    //         throw new UserException(ErrorCode::DATA_CREATE_FAIL);
-    //     }
+        if (!$myRewardCategory->create()) {
+            throw new UserException(ErrorCode::DATA_CREATE_FAIL);
+        }
 
-    //     return $this->createItem(
-    //         $myJob,
-    //         new JobTransformer,
-    //         'response'
-    //     );
-    // }
+        return $this->createItem(
+            $myRewardCategory,
+            new RewardCategoryTransformer,
+            'response'
+        );
+    }
 
-    // /**
-    //  * @Route("/{id:[0-9]+}", methods={"PUT"})
-    //  */
-    // public function updateAction(int $id = 0)
-    // {
-    //     $formData = (array) $this->request->getJsonRawBody();
+    /**
+     * @Route("/{id:[0-9]+}", methods={"PUT"})
+     */
+    public function updateAction(int $id = 0)
+    {
+        $postForm = (array) $this->request->getPost('form');
+        $formData = (array) json_decode($postForm[0]);
 
-    //     $myUser = UserModel::findFirst([
-    //         'id = :id:',
-    //         'bind' => ['id' => (int) $id]
-    //     ]);
+        $myRewardCategory = RewardCategoryModel::findFirst([
+            'id = :id:',
+            'bind' => ['id' => (int) $id]
+        ]);
 
-    //     if (!$myUser) {
-    //         throw new UserException(ErrorCode::DATA_NOTFOUND);
-    //     }
+        if (!$myRewardCategory) {
+            throw new UserException(ErrorCode::DATA_NOTFOUND);
+        }
 
-    //     $myUser->fullname = (string) $formData['fullname'];
-    //     $myUser->groupid = (string) $formData['groupid'];
-    //     $myUser->status = (int) $formData['status'];
-    //     $myUser->verifytype = (int) $formData['verifytype'];
+        $myRewardCategory->name = (string) $formData['name'];
+        $myRewardCategory->description = (string) $formData['description'];
+        $myRewardCategory->displayorder = (int) $formData['displayorder'];
+        $myRewardCategory->status = (int) $formData['status'];
+        $myRewardCategory->parentid = (int) $formData['parentid'];
 
-    //     if (!$myUser->update()) {
-    //         throw new UserException(ErrorCode::USER_UPDATE_FAIL);
-    //     }
+        if (!$myRewardCategory->update()) {
+            throw new UserException(ErrorCode::USER_UPDATE_FAIL);
+        }
 
-    //     return $this->createItem(
-    //         $myUser,
-    //         new UserTransformer,
-    //         'data'
-    //     );
-    // }
+        return $this->createItem(
+            $myRewardCategory,
+            new RewardCategoryTransformer,
+            'data'
+        );
+    }
 
-    // /**
-    //  * @Route("/bulk", methods={"POST"})
-    //  */
-    // public function bulkAction()
-    // {
-    //     $formData = (array) $this->request->getJsonRawBody();
+    /**
+     * @Route("/{id:[0-9]+}", methods={"DELETE"})
+     */
+    public function deleteAction(int $id = 0)
+    {
+        $myRewardCategory = RewardCategoryModel::findFirst([
+            'id = :id:',
+            'bind' => [
+                'id' => (int) $id
+            ]
+        ]);
 
-    //     if (count($formData['itemSelected']) > 0 && $formData['actionSelected'] != '') {
-    //         switch ($formData['actionSelected']) {
-    //             case 'delete':
-    //                 // Start a transaction
-    //                 $this->db->begin();
-    //                 foreach ($formData['itemSelected'] as $item) {
-    //                     $myUser = UserModel::findFirst([
-    //                         'id = :id:',
-    //                         'bind' => ['id' => (int) $item->id]
-    //                     ])->delete();
-    //                     // If fail stop a transaction
-    //                     if ($myUser == false) {
-    //                         $this->db->rollback();
-    //                         return;
-    //                     }
-    //                 }
-    //                 // Commit a transaction
-    //                 if ($this->db->commit() == false) {
-    //                     throw new UserException(ErrorCode::DATA_BULK_FAILED);
-    //                 }
+        if (!$myRewardCategory) {
+            throw new UserException(ErrorCode::DATA_NOTFOUND);
+        }
 
-    //                 break;
-    //             case 'enable':
-    //                 $this->db->begin();
-    //                 foreach ($formData['itemSelected'] as $item) {
-    //                     $myUser = UserModel::findFirst([
-    //                         'id = :id:',
-    //                         'bind' => ['id' => (int) $item->id]
-    //                     ]);
-    //                     $myUser->status = UserModel::STATUS_ENABLE;
+        if (!$myRewardCategory->delete()) {
+            throw new UserException(ErrorCode::DATA_DELETE_FAIL);
+        }
 
-    //                     if (!$myUser->update()) {
-    //                         $this->db->rollback();
-    //                         return;
-    //                     }
-    //                 }
+        return $this->createItem(
+            $myRewardCategory,
+            new RewardCategoryTransformer,
+            'data'
+        );
+    }
 
-    //                 if ($this->db->commit() == false) {
-    //                     throw new UserException(ErrorCode::DATA_BULK_FAILED);
-    //                 }
+    /**
+     * @Route("/formsource", methods={"GET"})
+     */
+    public function formsourceAction()
+    {
+        return $this->respondWithArray([
+            'statusList' => RewardCategoryModel::getStatusList(),
+            'categoryList' => RewardCategoryModel::find()
+        ], 'data');
+    }
 
-    //                 break;
-    //             case 'disable':
-    //                 $this->db->begin();
-    //                 foreach ($formData['itemSelected'] as $item) {
-    //                     $myUser = UserModel::findFirst([
-    //                         'id = :id:',
-    //                         'bind' => ['id' => (int) $item->id]
-    //                     ]);
-    //                     $myUser->status = UserModel::STATUS_DISABLE;
+    /**
+     * @Route("/closure", methods={"GET"})
+     */
+    public function closureAction()
+    {
+        $allCategories = RewardCategoryModel::getFullParentProductCategorys();
 
-    //                     if (!$myUser->update()) {
-    //                         $this->db->rollback();
-    //                         return;
-    //                     }
-    //                 }
-
-    //                 if ($this->db->commit() == false) {
-    //                     throw new UserException(ErrorCode::DATA_BULK_FAILED);
-    //                 }
-
-    //                 break;
-    //         }
-    //     }
-
-    //     return $this->respondWithOK();
-    // }
-
-    // /**
-    //  * @Route("/{id:[0-9]+}", methods={"DELETE"})
-    //  */
-    // public function deleteAction(int $id = 0)
-    // {
-    //     $myUser = UserModel::findFirst([
-    //         'id = :id:',
-    //         'bind' => [
-    //             'id' => (int) $id
-    //         ]
-    //     ]);
-
-    //     if (!$myUser) {
-    //         throw new UserException(ErrorCode::DATA_NOTFOUND);
-    //     }
-
-    //     if (!$myUser->delete()) {
-    //         throw new UserException(ErrorCode::DATA_DELETE_FAIL);
-    //     }
-
-    //     return $this->createItem(
-    //         $myUser,
-    //         new UserTransformer,
-    //         'data'
-    //     );
-    // }
-
-    // /**
-    //  * @Route("/formsource", methods={"GET"})
-    //  */
-    // public function formsourceAction()
-    // {
-    //     return $this->respondWithArray([
-    //         'statusList' => JobModel::getStatusList(),
-    //         'voicescriptcategoryList' => VoiceScriptCategoryModel::find()
-    //     ], 'data');
-    // }
+        return $this->createCollection(
+            $allCategories,
+            new RewardCategoryClosureTransformer,
+            'data'
+        );
+    }
 }

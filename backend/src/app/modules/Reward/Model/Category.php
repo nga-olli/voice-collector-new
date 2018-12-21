@@ -5,6 +5,7 @@ use Core\Model\AbstractModel;
 use Phalcon\Validation;
 use Phalcon\Validation\Validator\PresenceOf;
 use Phalcon\Validation\Validator\Uniqueness;
+use Shirou\Behavior\Model\Fileable;
 
 /**
  * @Source('fly_reward_category');
@@ -62,6 +63,28 @@ class Category extends AbstractModel
     const STATUS_ENABLE = 1;
     const STATUS_DISABLE = 3;
 
+    public function initialize()
+    {
+        $config = $this->getDI()->get('config');
+
+        if (!$this->getDI()->get('app')->isConsole()) {
+            $configBehavior = [
+                'field' => 'cover',
+                'uploadPath' => $config->default->rewards->directory,
+                'allowedFormats' => $config->default->rewards->mimes->toArray(),
+                'allowedMaximumSize' => $config->default->rewards->maxsize,
+                'allowedMinimumSize' => $config->default->rewards->minsize,
+                'isOverwrite' => $config->default->rewards->isoverwrite
+            ];
+
+            $this->addBehavior(new Fileable([
+                'beforeCreate' => $configBehavior,
+                'beforeDelete' => $configBehavior,
+                'beforeUpdate' => $configBehavior
+            ]));
+        }
+    }
+
     public function getStatusName(): string
     {
         $name = '';
@@ -108,5 +131,24 @@ class Category extends AbstractModel
         }
 
         return $class;
+    }
+
+    public static function getFullParentProductCategorys($parentId = 0)
+    {
+        $array = Category::find()->toArray();
+
+        $array = array_combine(array_column ($array, 'id'), array_values($array));
+
+        foreach ($array as $k => &$v) {
+            if (isset($array[$v['parentid']])) {
+                $array[$v['parentid']]['children'][$k] = &$v;
+            }
+            unset($v);
+        }
+        
+
+        return array_filter($array, function($v) use ($parentId) {
+            return $v['parentid'] == $parentId;
+        });
     }
 }

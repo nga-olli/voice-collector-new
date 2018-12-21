@@ -37,13 +37,15 @@ class TypeController extends AbstractController
 
         // optional Filter
         $status = (int) $this->request->getQuery('status', null, 0);
+        $rcid = (int) $this->request->getQuery('rcid', null, 0);
 
         $formData['columns'] = '*';
         $formData['conditions'] = [
             'keyword' => $keyword,
             'searchKeywordIn' => $searchKeywordInData,
             'filterBy' => [
-                'status' => $status
+                'status' => $status,
+                'rcid' => $rcid
             ]
         ];
         $formData['orderBy'] = $orderBy;
@@ -86,6 +88,7 @@ class TypeController extends AbstractController
 
         $myGiftType = new GiftTypeModel();
         $myGiftType->name = $formData['name'];
+        $myGiftType->rcid = $formData['category'];
         $myGiftType->description = $formData['description'];
         $myGiftType->cost = $formData['cost'];
         $myGiftType->lowstockthreshold = $formData['lowstockthreshold'];
