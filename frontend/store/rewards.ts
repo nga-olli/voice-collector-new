@@ -73,15 +73,11 @@ export const actions = {
 
   async add({ commit }, { formData }) {
     let data = new FormData();
-    formData.files.map((item, index) => {
-      data.append(`files[${index}][value]`, item.raw);
-    });
     data.append('attrs', JSON.stringify(formData.attrs));
     data.append('name', formData.name);
-    data.append('requiredpoint', formData.requiredpoint);
     data.append('type', formData.type);
 
-    return await this.$axios.$post(`/v1/rewards`, data)
+    await this.$axios.$post(`/v1/rewards`, data)
       .then(res => commit('UPDATE_ITEMS', res.data));
   },
 

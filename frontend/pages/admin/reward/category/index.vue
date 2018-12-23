@@ -14,10 +14,10 @@
         </nuxt-link>
         <nuxt-link to="/admin/reward/define"> &nbsp;
           <el-button type="text" icon="el-icon-plus">Type</el-button>
-        </nuxt-link>
-        <nuxt-link to="/admin/reward/define"> &nbsp;
-          <el-button type="text" icon="el-icon-plus">Gift</el-button>
-        </nuxt-link>
+        </nuxt-link> &nbsp;
+        <el-button size="mini" type="text" icon="el-icon-plus" @click="onShowAddForm">
+          Gift
+        </el-button>
       </div>
     </el-col>
     <el-col :span="24">
@@ -28,6 +28,7 @@
         <admin-reward-type-items :rewardtypes="rewardtypes"></admin-reward-type-items>
       </el-col>
     </el-col>
+    <add-form :addFormState="addFormVisible" :onClose="onHideAddForm"></add-form>
   </el-row>
 </template>
 
@@ -37,6 +38,7 @@ import { Action, State } from 'vuex-class';
 import Breadcrumb from '~/components/admin/breadcrumb.vue';
 import Pagination from '~/components/admin/pagination.vue';
 import AdminRewardTypeItems from '~/components/admin/reward/type/items.vue';
+import AddForm from '~/components/admin/reward/add-form.vue';
 
 @Component({
   layout: 'admin',
@@ -45,6 +47,7 @@ import AdminRewardTypeItems from '~/components/admin/reward/type/items.vue';
     Breadcrumb,
     Pagination,
     AdminRewardTypeItems,
+    AddForm
   }
 })
 export default class AdminRewardCategoryPage extends Vue {
@@ -63,6 +66,7 @@ export default class AdminRewardCategoryPage extends Vue {
     label: 'name'
   };
   loading: boolean = false;
+  addFormVisible: boolean = false;
 
   head() {
     return {
@@ -100,6 +104,12 @@ export default class AdminRewardCategoryPage extends Vue {
         this.loading = false;
       });
   }
+
+  onShowAddForm() {
+    this.addFormVisible = !this.addFormVisible;
+  }
+
+  onHideAddForm() { this.addFormVisible = false; }
 }
 </script>
 

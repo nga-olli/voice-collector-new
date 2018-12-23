@@ -16,23 +16,13 @@ class Gift extends TransformerAbstract
     public function transform(GiftModel $gift)
     {
         $humandatecreated = new Moment($gift->datecreated);
-        if ($gift->dateused > 0) {
-            $m = new Moment($gift->dateused);
-            $humandateused = $m->format('d M Y, H:i');
-        } else {
-            $humandateused = '';
-        }
-
+        
         return [
             'id' => (string) $gift->id,
             'gtid' => (string) $gift->gtid,
             'name' => (string) $gift->name,
-            'description' => (string) $gift->description,
             'displayorder' => (string) $gift->displayorder,
-            'datecreated' => (string) $gift->datecreated,
-            'humandatecreated' => (string) $humandatecreated->format('d-m-Y, H:i'),
-            'dateused' => (string) $gift->dateused,
-            'humandateused' => (string) $humandateused
+            'datecreated' => (string) $gift->datecreated
         ];
     }
 

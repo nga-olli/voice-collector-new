@@ -54,17 +54,13 @@ vi:
     </el-submenu>
     <el-submenu index="/admin/reward">
       <template slot="title">{{ $t('reward') }}</template>
-      <el-menu-item index="/admin/reward">
+      <el-menu-item index="/admin/reward/category">
         <i class="el-icon-fa-navicon"></i>
         {{ $t('default.list') }}
       </el-menu-item>
-      <el-menu-item index="/admin/reward/category">
-        <i class="el-icon-fa-navicon"></i>
-        {{ $t('category') }}
-      </el-menu-item>
       <el-menu-item index="/admin/reward/define">
-        <i class="el-icon-fa-navicon"></i>
-        {{ $t('type') }}
+        <i class="el-icon-fa-plus"></i>
+        Type
       </el-menu-item>
     </el-submenu>
     <el-submenu index="/admin/job">

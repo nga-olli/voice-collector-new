@@ -47,11 +47,6 @@ class Gift extends AbstractModel
     public $status;
 
     /**
-    * @Column(type="integer", nullable=true, column="g_is_used")
-    */
-    public $isused;
-
-    /**
     * @Column(type="integer", nullable=true, column="g_date_created")
     */
     public $datecreated;

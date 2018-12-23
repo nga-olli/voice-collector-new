@@ -5,7 +5,7 @@
         <i class="el-icon-fa-angle-left"></i>
       </div>
       <breadcrumb :data="[
-        { name: 'Reward', link: '/admin/reward' },
+        { name: 'Reward', link: '/admin/reward/category' },
         { name: 'Define', link: '' }
       ]">
       </breadcrumb>

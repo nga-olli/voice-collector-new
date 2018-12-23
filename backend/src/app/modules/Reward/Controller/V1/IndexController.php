@@ -7,6 +7,7 @@ use Core\Controller\AbstractController;
 use Core\Helper\Utils as Helper;
 use Reward\Model\GiftType as GiftTypeModel;
 use Reward\Model\Gift as GiftModel;
+use Reward\Model\Category as RewardCategoryModel;
 use Reward\Model\GiftStock as GiftStockModel;
 use Reward\Transformer\Gift as GiftTransformer;
 use Reward\Transformer\GiftStock as GiftStockTransformer;
@@ -117,12 +118,23 @@ class IndexController extends AbstractController
     {
         $formData = (array) $this->request->getPost();
 
+        $myGiftType = GiftTypeModel::findFirst([
+            'id = :id:',
+            'bind' => [
+                'id' => (int) $formData['type']
+            ]
+        ]);
+
+        if (!$myGiftType) {
+            throw new UserException(ErrorCode::DATA_NOTFOUND);
+        }
+
         $myGift = new GiftModel();
         $myGift->assign([
+            'rcid' => (int) $myGiftType->rcid,
             'name' => (string) $formData['name'],
             'gtid' => (int) $formData['type'],
-            'isused' => (int) GiftModel::IS_NOT_USED,
-            'requiredpoint' => (int) $formData['requiredpoint']
+            'status' => (int) GiftModel::STATUS_AVAILABLE
         ]);
 
         if (!$myGift->create()) {

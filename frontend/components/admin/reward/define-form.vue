@@ -18,44 +18,43 @@
               <el-form-item prop="lowstockthreshold" label="Low stock threshold">
                 <el-input type="text" v-model="form.lowstockthreshold" clearable></el-input>
               </el-form-item>
+              <el-form-item>
+                <el-upload
+                  ref="cover"
+                  action=""
+                  :auto-upload="false"
+                  :limit="1"
+                  list-type="picture-card"
+                  :on-preview="handlePictureCardPreview"
+                  :on-change="onChange"
+                  :on-remove="onRemove">
+                  <img v-if="imageUrl" :src="imageUrl">
+                  <i v-else class="el-icon-plus"></i>
+                </el-upload>
+              </el-form-item>
             </el-col>
             <el-col :md="8">
               <el-form-item prop="delivery" label="Delivery" label-position="top">
-                <el-select v-model="form.delivery" placeholder="Select delivery type">
+                <el-select v-model="form.delivery" placeholder="Select delivery type" style="width: 100%">
                   <el-option label="Auto" value="1"></el-option>
                   <el-option label="Manual" value="3"></el-option>
                 </el-select>
               </el-form-item>
               <el-form-item prop="category" label="Reward Category">
-                <el-select size="small" v-model="form.category" placeholder="Select">
+                <el-select size="small" v-model="form.category" placeholder="Select" style="width: 100%">
                   <el-option label="None" :value="0"></el-option>
                   <el-option v-for="item in categoriesFormSource.categoryList" :key="item.id" :label="item.name" :value="item.id">
                   </el-option>
                 </el-select>
               </el-form-item>
               <el-form-item prop="description" label="Description">
-                <el-input type="textarea" v-model="form.description" :autosize="{ minRows: 6, maxRows: 8}"></el-input>
+                <el-input type="textarea" v-model="form.description" :autosize="{ minRows: 8, maxRows: 16}"></el-input>
               </el-form-item>
-            </el-col>
-            <el-col :md="8">
-              <p>Cover</p>
-              <el-upload
-                ref="cover"
-                action=""
-                :auto-upload="false"
-                :limit="1"
-                list-type="picture-card"
-                :on-preview="handlePictureCardPreview"
-                :on-change="onChange"
-                :on-remove="onRemove">
-                <img v-if="imageUrl" :src="imageUrl">
-                <i v-else class="el-icon-plus"></i>
-              </el-upload>
             </el-col>
           </el-row>
           <el-row>
             <el-col :md="20">
-              <p>Dynamic Attributes</p>
+              <p><strong>Dynamic Attributes</strong></p>
             </el-col>
           </el-row>
           <el-row style="margin-bottom: 10px">

@@ -57,7 +57,6 @@ export default class AddForm extends Vue {
   form: any = {
     name: '',
     type: null,
-    requiredpoint: 1,
     attrs: null
   };
 
@@ -67,20 +66,6 @@ export default class AddForm extends Vue {
 
   get rules() {
     return {
-      name: [
-        {
-          required: true,
-          message: this.$t('msg.nameIsRequired'),
-          trigger: 'blur'
-        }
-      ],
-      requiredpoint: [
-        {
-          required: true,
-          message: this.$t('msg.requiredpointIsRequired'),
-          trigger: 'change'
-        }
-      ],
       type: [
         {
           required: true,
@@ -102,28 +87,25 @@ export default class AddForm extends Vue {
   }
 
   onSubmit() {
-    const that = this;
-
     this.$refs.addForm.validate(async valid => {
       if (valid) {
-        that.loading = true;
+        // that.loading = true;
+        await this.addAction({ formData: this.form })
+          // .then(res => {
+          //   that.loading = false;
 
-        await that.addAction({ formData: that.form })
-          .then(res => {
-            that.loading = false;
+          //   that.$message({
+          //     showClose: true,
+          //     message: that.$t('msg.addGiftSuccess').toString(),
+          //     type: 'success',
+          //     duration: 3 * 1000
+          //   })
 
-            that.$message({
-              showClose: true,
-              message: that.$t('msg.addGiftSuccess').toString(),
-              type: 'success',
-              duration: 3 * 1000
-            })
-
-            return that.onClose();
-          })
-          .catch(err => {
-            that.loading = false;
-          });
+          //   return that.onClose();
+          // })
+          // .catch(err => {
+          //   that.loading = false;
+          // });
       } else {
         return false;
       }
