@@ -3,26 +3,54 @@
     <el-col :span="24">
       <div class="filter-icon"><i class="el-icon-fa-text-width"></i></div>
       <breadcrumb :data="[
-        { name: 'Reward', link: '/admin/reward' },
-        { name: 'Category', link: '/admin/reward/category' },
+        { name: 'Reward', link: '/admin/reward/category' },
         { name: $t('default.list'), link: '' }
       ]">
       </breadcrumb>
       <div class="top-right-toolbar">
-        <nuxt-link to="/admin/reward/category/add">
-          <el-button type="text" icon="el-icon-plus">Category</el-button>
-        </nuxt-link>
         <nuxt-link to="/admin/reward/define"> &nbsp;
-          <el-button type="text" icon="el-icon-plus">Type</el-button>
+          <el-button type="text" icon="el-icon-plus" size="mini">
+            Add new type
+          </el-button>
         </nuxt-link> &nbsp;
-        <el-button size="mini" type="text" icon="el-icon-plus" @click="onShowAddForm">
-          Gift
+        <el-button size="mini" type="success" icon="el-icon-plus" @click="onShowAddForm">
+          Add new gift item
         </el-button>
       </div>
     </el-col>
     <el-col :span="24">
       <el-col :md="6" style="padding: 16px">
-        <el-tree :data="rewardcategories" :props="defaultProps" @node-click="handleNodeClick"></el-tree>
+        <nuxt-link to="/admin/reward/category/add" style="float: right;display: inline-block;">
+          <el-button type="primary" icon="el-icon-plus" size="mini">
+            Add new category
+          </el-button>
+        </nuxt-link>
+        <el-tree
+          style="margin-top: 40px;"
+          accordion
+          highlight-current
+          node-key="id"
+          :data="rewardcategories"
+          :props="defaultProps"
+          @node-click="handleNodeClick">
+          <span class="custom-tree-node" slot-scope="{ node, data }">
+            <span>{{ node.label }}</span>
+            <span>
+              <el-button
+                type="text"
+                size="mini"
+                @click="() => edit(data)">
+                Edit
+              </el-button>
+              <el-button
+                type="text"
+                size="mini"
+                @click="() => remove(node, data)">
+                Delete
+              </el-button>
+            </span>
+          </span>
+        </el-tree>
       </el-col>
       <el-col :md="18">
         <admin-reward-type-items :rewardtypes="rewardtypes"></admin-reward-type-items>
@@ -110,9 +138,24 @@ export default class AdminRewardCategoryPage extends Vue {
   }
 
   onHideAddForm() { this.addFormVisible = false; }
+
+  edit(data) {
+   console.log(data); 
+  }
+
+  remove(node, data) {
+    
+  }
 }
 </script>
 
 <style lang="scss">
-
+  .custom-tree-node {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    font-size: 14px;
+    padding-right: 8px;
+  }
 </style>

@@ -69,10 +69,6 @@ class Gift extends AbstractModel
     {
         $validator = new Validation();
 
-        $validator->add('name', new PresenceOf([
-            'message' => 'message-name-notempty'
-        ]));
-
         $validator->add('gtid', new PresenceOf([
             'message' => 'message-gtid-notempty'
         ]));
@@ -98,6 +94,64 @@ class Gift extends AbstractModel
         } else {
             return '';
         }
+    }
+
+    public function getStatusName(): string
+    {
+        $name = '';
+        $lang = self::getStaticDi()->get('lang');
+
+        switch ($this->status) {
+            case self::STATUS_AVAILABLE:
+                $name = 'Available';
+                break;
+            case self::STATUS_DELIVERED:
+                $name = 'Delivered';
+                break;
+            case self::STATUS_PENDING_DELIVERY:
+                $name = 'Pending delivery';
+                break;
+        }
+
+        return $name;
+    }
+
+    public static function getStatusList()
+    {
+        $lang = self::getStaticDi()->get('lang');
+
+        return $data = [
+            [
+                'label' => 'Available',
+                'value' => (string) self::STATUS_AVAILABLE
+            ],
+            [
+                'label' => 'Delivered',
+                'value' => (string) self::STATUS_DELIVERED
+            ],
+            [
+                'label' => 'Pending delivery',
+                'value' => (string) self::STATUS_PENDING_DELIVERY
+            ],
+        ];
+    }
+
+    public function getStatusStyle(): string
+    {
+        $class = '';
+        switch ($this->status) {
+            case self::STATUS_AVAILABLE:
+                $class = 'primary';
+                break;
+            case self::STATUS_DELIVERED:
+                $class = 'success';
+                break;
+            case self::STATUS_PENDING_DELIVERY:
+                $class = 'warning';
+                break;
+        }
+
+        return $class;
     }
 
     // public function afterDelete()

@@ -6,7 +6,7 @@
       </div>
       <breadcrumb :data="[
         { name: 'Reward', link: '/admin/reward/category' },
-        { name: 'Define', link: '' }
+        { name: 'Add new type', link: '' }
       ]">
       </breadcrumb>
     </el-col>
@@ -37,7 +37,7 @@ export default class AdminRewardDefine extends Vue {
         {
           hid: 'description',
           name: 'description',
-          content: 'Define reward'
+          content: 'Add new type'
         }
       ]
     };

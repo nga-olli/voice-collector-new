@@ -6,6 +6,7 @@ use Phalcon\Validation;
 use Phalcon\Validation\Validator\PresenceOf;
 use Phalcon\Validation\Validator\Uniqueness;
 use Shirou\Behavior\Model\Fileable;
+use Core\Helper\Utils as Helper;
 
 /**
  * @Source('fly_reward_category');
@@ -150,5 +151,21 @@ class Category extends AbstractModel
         return array_filter($array, function($v) use ($parentId) {
             return $v['parentid'] == $parentId;
         });
+    }
+
+    public function getCoverPath(): string
+    {
+        $config = $this->getDI()->get('config');
+        $url = $this->getDI()->get('url');
+
+        if ($this->cover != '') {
+            return Helper::getFileUrl(
+                $url->getBaseUri(),
+                $config->default->rewards->directory,
+                $this->cover
+            );
+        } else {
+            return '';
+        }
     }
 }

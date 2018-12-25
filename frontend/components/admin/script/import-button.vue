@@ -2,7 +2,7 @@
 
 <template>
   <div>
-    <el-select clearable size="small" v-model="categoryId" :placeholder="$t('default.all')">
+    <el-select clearable size="mini" v-model="categoryId" placeholder="Select category" style="float: right;margin-left: 10px;">
       <el-option v-for="item in formSource.voicescriptcategoryList" :key="item.id" :label="item.name" :value="item.id">
       </el-option>
     </el-select>

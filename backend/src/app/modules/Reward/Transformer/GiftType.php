@@ -23,6 +23,7 @@ class GiftType extends TransformerAbstract
                 'gtid' => $gifttype->id
             ]
         ]);
+
         return [
             'id' => (string) $gifttype->id,
             'name' => (string) $gifttype->name,
@@ -32,8 +33,11 @@ class GiftType extends TransformerAbstract
                 'style' => (string) $gifttype->getStatusStyle()
             ],
             'total' => $myTotalGift,
-            'datecreated' => (string) $gifttype->datecreated,
-            'humandatecreated' => (string) $humandatecreated->format('d-m-Y, H:i')
+            'cover' => $gifttype->getCoverPath(),
+            'datecreated' => [
+                'readable' => (string) (new Moment($gifttype->datecreated))->format('d/m/Y'),
+                'timestamp' => (string) $gifttype->datecreated
+            ]
         ];
     }
 

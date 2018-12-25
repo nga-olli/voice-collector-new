@@ -38,13 +38,14 @@ class IndexController extends AbstractController
         $keyword = (string) $this->request->getQuery('keyword', null, '');
 
         // optional Filter
-        $isused = (int) $this->request->getQuery('isused', null, 0);
+        $gtid = (int) $this->request->getQuery('gtid', null, 0);
 
         $formData['columns'] = '*';
         $formData['conditions'] = [
             'keyword' => $keyword,
             'searchKeywordIn' => $searchKeywordInData,
             'filterBy' => [
+                'gtid' => (int) $gtid
             ]
         ];
         $formData['orderBy'] = $orderBy;
@@ -132,7 +133,6 @@ class IndexController extends AbstractController
         $myGift = new GiftModel();
         $myGift->assign([
             'rcid' => (int) $myGiftType->rcid,
-            'name' => (string) $formData['name'],
             'gtid' => (int) $formData['type'],
             'status' => (int) GiftModel::STATUS_AVAILABLE
         ]);

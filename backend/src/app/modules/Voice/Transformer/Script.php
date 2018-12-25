@@ -4,10 +4,14 @@ namespace Voice\Transformer;
 use League\Fractal\TransformerAbstract;
 use Moment\Moment;
 use Voice\Model\Script as VoiceScriptModel;
+use Voice\Model\ScriptCategory as ScriptCategoryModel;
+use Voice\Transformer\ScriptCategory as ScriptCategoryTransformer;
 
 class Script extends TransformerAbstract
 {
-    protected $availableIncludes = [];
+    protected $availableIncludes = [
+        'category'
+    ];
 
     public function transform(VoiceScriptModel $voicescript)
     {
@@ -26,5 +30,16 @@ class Script extends TransformerAbstract
                 'timestamp' => (string) $voicescript->datecreated
             ]
         ];
+    }
+
+    public function includeCategory(VoiceScriptModel $voicescript)
+    {
+        $myCategory = ScriptCategoryModel::findFirstById($voicescript->vscid);
+
+        if (!$myCategory) {
+            $myCategory = new ScriptCategoryModel();
+        }
+
+        return $this->item($myCategory, new ScriptCategoryTransformer);
     }
 }

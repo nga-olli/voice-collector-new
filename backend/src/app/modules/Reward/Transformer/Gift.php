@@ -22,7 +22,15 @@ class Gift extends TransformerAbstract
             'gtid' => (string) $gift->gtid,
             'name' => (string) $gift->name,
             'displayorder' => (string) $gift->displayorder,
-            'datecreated' => (string) $gift->datecreated
+            'status' =>  [
+                'label' => (string) $gift->getStatusName(),
+                'value' => (string) $gift->status,
+                'style' => (string) $gift->getStatusStyle()
+            ],
+            'datecreated' => [
+                'readable' => (string) (new Moment($gift->datecreated))->format('d/m/Y'),
+                'timestamp' => (string) $gift->datecreated
+            ]
         ];
     }
 

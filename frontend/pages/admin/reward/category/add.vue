@@ -5,9 +5,8 @@
         <i class="el-icon-fa-angle-left"></i>
       </div>
       <breadcrumb :data="[
-        { name: 'Reward', link: '/admin/reward' },
-        { name: 'Category', link: '/admin/reward/category' },
-        { name: $t('default.add'), link: '' }
+        { name: 'Reward', link: '/admin/reward/category' },
+        { name: 'Add new category', link: '' }
       ]">
       </breadcrumb>
     </el-col>

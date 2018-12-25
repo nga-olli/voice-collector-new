@@ -53,9 +53,11 @@ export const mutations = {
 }
 
 export const actions = {
-  async get_all({ commit }, { query }) {
-    return await this.$axios.$get(`/v1/rewards`, {
-      params: query
+  async get_all({ commit }, { query, gtid }) {
+    await this.$axios.$get(`/v1/rewards`, {
+      params: Object.assign(query, {
+        gtid: gtid
+      })
     }).then(res => {
       commit('SET_DATA', res)
       commit('SET_QUERY', res)
@@ -74,7 +76,6 @@ export const actions = {
   async add({ commit }, { formData }) {
     let data = new FormData();
     data.append('attrs', JSON.stringify(formData.attrs));
-    data.append('name', formData.name);
     data.append('type', formData.type);
 
     await this.$axios.$post(`/v1/rewards`, data)

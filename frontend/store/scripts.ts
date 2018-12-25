@@ -50,7 +50,7 @@ export const mutations = {
 
 export const actions = {
   async get_all({ commit }, { query }) {
-    return await this.$axios.$get(`/v1/scripts`, {
+    return await this.$axios.$get(`/v1/scripts?include=category`, {
       params: query
     }).then(res => {
       commit('SET_DATA', res)

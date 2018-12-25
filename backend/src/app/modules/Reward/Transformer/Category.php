@@ -25,7 +25,8 @@ class Category extends TransformerAbstract
             'datecreated' => [
                 'readable' => (string) (new Moment($category->datecreated))->format('d/m/Y'),
                 'timestamp' => (string) $category->datecreated
-            ]
+            ],
+            'cover' => (string) $category->getCoverPath()
         ];
     }
 }

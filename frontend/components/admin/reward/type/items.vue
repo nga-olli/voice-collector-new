@@ -5,23 +5,25 @@
       row-key="id">
       <el-table-column label="#" prop="id" width="50">
       </el-table-column>
-      <el-table-column label="Name" prop="name">
+      <el-table-column label="Type name" prop="name">
       </el-table-column>
       <el-table-column label="Quantity" prop="total">
         <template slot-scope="scope">
           <el-badge :value="scope.row.total > 0 ? scope.row.total : 'Out of stock'"></el-badge>
         </template>
       </el-table-column>
-      
       <el-table-column label="Status">
          <template slot-scope="scope">
           <el-tag :type="scope.row.status.style" size="mini">{{ scope.row.status.label }}</el-tag>
         </template>
       </el-table-column>
-      <el-table-column class-name="td-operation" width="130">
+      <el-table-column class-name="td-operation" width="200">
         <template slot-scope="scope">
           <el-button-group class="operation">
-            <!-- <el-button icon="el-icon-edit" size="mini" @click="onShowEditForm(scope.row.id)"></el-button> -->
+            <nuxt-link :to="`/admin/reward/type/${scope.row.id}`" style="display: inline-block">
+              <el-button icon="el-icon-menu" size="mini">Show items</el-button>
+            </nuxt-link>
+            <el-button icon="el-icon-edit" size="mini">Edit type</el-button>
             <!-- <delete-button :id="scope.row.id" store="jobs"></delete-button> -->
           </el-button-group>
         </template>

@@ -171,6 +171,22 @@ class GiftType extends AbstractModel
         return $class;
     }
 
+    public function getCoverPath(): string
+    {
+        $config = $this->getDI()->get('config');
+        $url = $this->getDI()->get('url');
+
+        if ($this->cover != '') {
+            return Helper::getFileUrl(
+                $url->getBaseUri(),
+                $config->default->rewards->directory,
+                $this->cover
+            );
+        } else {
+            return '';
+        }
+    }
+
     public function afterDelete()
     {
         $this->getAttributes()->delete();

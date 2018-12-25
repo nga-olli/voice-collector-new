@@ -8,9 +8,6 @@
       <el-col :md="24" :xs="24">
         <el-col :md="24">
           <el-form autoComplete="on" label-position="left" :model="form" :rules="rules" ref="addForm" >
-            <el-form-item prop="name" label="Name">
-              <el-input type="text" size="small" v-model="form.name" autofocus clearable></el-input>
-            </el-form-item>
             <el-form-item prop="type" label="Type">
               <el-select size="small" v-model="form.type" placeholder="Select reward type" style="width: 100%;" :loading="loading" @change="onChangeType">
                 <el-option v-for="item in formSource.typeList" :key="item.id" :label="item.name" :value="item.id">
@@ -55,7 +52,6 @@ export default class AddForm extends Vue {
   loading: boolean = false;
   showAttrs = false;
   form: any = {
-    name: '',
     type: null,
     attrs: null
   };
@@ -89,23 +85,24 @@ export default class AddForm extends Vue {
   onSubmit() {
     this.$refs.addForm.validate(async valid => {
       if (valid) {
-        // that.loading = true;
-        await this.addAction({ formData: this.form })
-          // .then(res => {
-          //   that.loading = false;
+        this.loading = true;
 
-          //   that.$message({
-          //     showClose: true,
-          //     message: that.$t('msg.addGiftSuccess').toString(),
-          //     type: 'success',
-          //     duration: 3 * 1000
-          //   })
+        try {
+          await this.addAction({ formData: this.form })
+          this.loading = false;
 
-          //   return that.onClose();
-          // })
-          // .catch(err => {
-          //   that.loading = false;
-          // });
+          this.$message({
+            showClose: true,
+            message: this.$t('msg.addGiftSuccess').toString(),
+            type: 'success',
+            duration: 3 * 1000
+          });
+
+          this.$refs.addForm.resetFields();
+          
+        } catch (error) {
+          this.loading = false;
+        }
       } else {
         return false;
       }

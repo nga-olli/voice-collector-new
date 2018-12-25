@@ -22,8 +22,10 @@ class GiftStock extends TransformerAbstract
             'gid' => (string) $giftstock->gid,
             'gaid' => (string) $giftstock->gaid,
             'value' => (string) $giftstock->value,
-            'datecreated' => (string) $giftstock->datecreated,
-            'humandatecreated' => (string) $humandatecreated->format('d-m-Y, H:i')
+            'datecreated' => [
+                'readable' => (string) (new Moment($giftstock->datecreated))->format('d/m/Y'),
+                'timestamp' => (string) $giftstock->datecreated
+            ]
         ];
     }
 
