@@ -34,6 +34,7 @@ class GiftType extends TransformerAbstract
             ],
             'total' => $myTotalGift,
             'cost' => $gifttype->cost,
+            'description' => $gifttype->description,
             'cover' => $gifttype->getCoverPath(),
             'datecreated' => [
                 'readable' => (string) (new Moment($gifttype->datecreated))->format('d/m/Y'),
