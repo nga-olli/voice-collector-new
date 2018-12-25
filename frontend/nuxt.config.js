@@ -51,7 +51,7 @@ module.exports = {
   },
   loading: { name: 'cube-grid', color: '#3B8070', background: '#333' },
   build: {
-    analyze: true,
+    analyze: false,
     vendor: [
       'axios',
       'gsap',

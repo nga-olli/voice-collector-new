@@ -6,6 +6,12 @@
       <el-table-column label="#" prop="id" width="50">
       </el-table-column>
       <el-table-column label="Type name" prop="name">
+        <template slot-scope="scope">
+          <div class="cover">
+            <img v-if="scope.row.cover !== ''" :src="scope.row.cover" width="70" height="70">
+          </div>
+          <span class="fullname">{{ scope.row.name }}</span>
+        </template>
       </el-table-column>
       <el-table-column label="Quantity" prop="total">
         <template slot-scope="scope">
@@ -62,5 +68,10 @@ export default class AdminRewardTypeItems extends Vue {
 </script>
 
 <style lang="scss">
-
+  .cover {
+    margin-right: 10px;
+    float: left;
+    display: inline-block;
+  }
 </style>
+

@@ -33,6 +33,7 @@ class GiftType extends TransformerAbstract
                 'style' => (string) $gifttype->getStatusStyle()
             ],
             'total' => $myTotalGift,
+            'cost' => $gifttype->cost,
             'cover' => $gifttype->getCoverPath(),
             'datecreated' => [
                 'readable' => (string) (new Moment($gifttype->datecreated))->format('d/m/Y'),

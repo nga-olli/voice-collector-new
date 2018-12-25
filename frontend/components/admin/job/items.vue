@@ -5,7 +5,7 @@
       <!-- <el-table-column type="selection"></el-table-column> -->
       <el-table-column label="#" prop="id" width="50">
       </el-table-column>
-      <el-table-column label="Name" prop="name">
+      <el-table-column label="Name" prop="name" width="250">
       </el-table-column>
       <el-table-column label="Type">
         <template slot-scope="scope">

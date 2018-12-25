@@ -5,7 +5,7 @@
     <el-table :data="scripts" style="width: 100%" row-key="id"
       @selection-change="onSelectionChange">
       <el-table-column type="selection"></el-table-column>
-      <el-table-column label="Category" width="100" :show-overflow-tooltip="true">
+      <el-table-column label="Category" width="150" :show-overflow-tooltip="true">
         <template slot-scope="scope">
           {{ scope.row.category.data.name }}
         </template>
