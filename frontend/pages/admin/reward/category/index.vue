@@ -1,7 +1,7 @@
 <template>
   <el-row>
     <el-col :span="24">
-      <div class="filter-icon"><i class="el-icon-fa-text-width"></i></div>
+      <div class="filter-icon"><i class="el-icon-fa-gift"></i></div>
       <breadcrumb :data="[
         { name: 'Reward', link: '/admin/reward/category' },
         { name: $t('default.list'), link: '' }
@@ -10,11 +10,11 @@
       <div class="top-right-toolbar">
         <nuxt-link to="/admin/reward/define"> &nbsp;
           <el-button type="text" icon="el-icon-plus" size="mini">
-            Add new type
+            Add type
           </el-button>
         </nuxt-link> &nbsp;
         <el-button size="mini" type="success" icon="el-icon-plus" @click="onShowAddForm">
-          Add new gift item
+          Add gift
         </el-button>
       </div>
     </el-col>
@@ -22,7 +22,7 @@
       <el-col :md="6" style="padding: 16px">
         <nuxt-link to="/admin/reward/category/add" style="float: right;display: inline-block;">
           <el-button type="primary" icon="el-icon-plus" size="mini">
-            Add new category
+            Add category
           </el-button>
         </nuxt-link>
         <el-tree
@@ -141,6 +141,9 @@ export default class AdminRewardCategoryPage extends Vue {
 
   edit(data) {
    console.log(data); 
+   return this.$router.push({
+     path: `/admin/reward/category/edit/${data.id}`
+   })
   }
 
   remove(node, data) {

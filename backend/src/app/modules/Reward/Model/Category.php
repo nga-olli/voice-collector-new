@@ -93,10 +93,10 @@ class Category extends AbstractModel
 
         switch ($this->status) {
             case self::STATUS_ENABLE:
-                $name = $lang->_('label-status-enable');
+                $name = 'Enabled';
                 break;
             case self::STATUS_DISABLE:
-                $name = $lang->_('label-status-disable');
+                $name = 'Disabled';
                 break;
         }
 
@@ -109,11 +109,11 @@ class Category extends AbstractModel
 
         return $data = [
             [
-                'label' => $lang->_('label-status-enable'),
+                'label' => 'Enabled',
                 'value' => (string) self::STATUS_ENABLE
             ],
             [
-                'label' => $lang->_('label-status-disable'),
+                'label' => 'Disabled',
                 'value' => (string) self::STATUS_DISABLE
             ],
         ];

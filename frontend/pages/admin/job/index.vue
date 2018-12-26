@@ -1,7 +1,7 @@
 <template>
   <el-row>
     <el-col :span="24">
-      <div class="filter-icon"><i class="el-icon-fa-text-width"></i></div>
+      <div class="filter-icon"><i class="el-icon-fa-tasks"></i></div>
       <breadcrumb :data="[
         { name: 'Job', link: '/admin/job' },
         { name: $t('default.list'), link: '' }

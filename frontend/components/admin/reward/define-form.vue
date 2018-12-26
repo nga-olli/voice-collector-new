@@ -8,32 +8,18 @@
       <el-col :md="24">
         <el-form autoComplete="on" label-position="left" :model="form" :rules="rules" ref="defineForm" size="mini">
           <el-row :gutter="30">
-            <el-col :md="8">
+            <el-col :md="7">
               <el-form-item prop="name" label="Name">
                 <el-input type="text" v-model="form.name" autofocus clearable></el-input>
               </el-form-item>
               <el-form-item prop="cost" label="Cost">
-                <el-input type="text" v-model="form.cost" clearable></el-input>
+                <el-input type="text" v-model="form.cost" clearable style="width: 30%"></el-input>
               </el-form-item>
               <el-form-item prop="lowstockthreshold" label="Low stock threshold">
-                <el-input type="text" v-model="form.lowstockthreshold" clearable></el-input>
-              </el-form-item>
-              <el-form-item>
-                <el-upload
-                  ref="cover"
-                  action=""
-                  :auto-upload="false"
-                  :limit="1"
-                  list-type="picture-card"
-                  :on-preview="handlePictureCardPreview"
-                  :on-change="onChange"
-                  :on-remove="onRemove">
-                  <img v-if="imageUrl" :src="imageUrl">
-                  <i v-else class="el-icon-plus"></i>
-                </el-upload>
+                <el-input type="text" v-model="form.lowstockthreshold" clearable style="width: 30%"></el-input>
               </el-form-item>
             </el-col>
-            <el-col :md="8">
+            <el-col :md="6">
               <el-form-item prop="delivery" label="Delivery" label-position="top">
                 <el-select v-model="form.delivery" placeholder="Select delivery type" style="width: 100%">
                   <el-option label="Auto" value="1"></el-option>
@@ -47,8 +33,27 @@
                   </el-option>
                 </el-select>
               </el-form-item>
-              <el-form-item prop="description" label="Description">
-                <el-input type="textarea" v-model="form.description" :autosize="{ minRows: 8, maxRows: 16}"></el-input>
+              <el-form-item prop="status" label="Status">
+                <el-select size="small" v-model="form.status" placeholder="Select" style="width: 100%" :loading="loading">
+                  <el-option v-for="item in formSource.statusList" :key="item.label" :label="item.label" :value="item.value">
+                  </el-option>
+                </el-select>
+              </el-form-item>
+            </el-col>
+            <el-col :md="6">
+              <el-form-item>
+                <el-upload
+                  ref="cover"
+                  action=""
+                  :auto-upload="false"
+                  :limit="1"
+                  list-type="picture-card"
+                  :on-preview="handlePictureCardPreview"
+                  :on-change="onChange"
+                  :on-remove="onRemove">
+                  <img v-if="imageUrl" :src="imageUrl">
+                  <i v-else class="el-icon-plus"></i>
+                </el-upload>
               </el-form-item>
             </el-col>
           </el-row>
@@ -122,6 +127,13 @@
           <el-form-item>
             <el-button @click="onAddAttribute" icon="el-icon-fa-plus" size="mini" type="success"> Add more</el-button>
           </el-form-item>
+          <el-row>
+            <el-col :md="16">
+              <el-form-item prop="description" label="Term and conditions">
+                <el-input type="textarea" v-model="form.description" :autosize="{ minRows: 8, maxRows: 16}"></el-input>
+              </el-form-item>
+            </el-col>
+          </el-row>
           <el-form-item style="margin-top: 30px">
             <el-button type="primary" :loading="loading" @click.native.prevent="onSubmit"> {{ $t('default.add') }}
             </el-button>
@@ -140,7 +152,9 @@ import { Action, State } from 'vuex-class';
 @Component
 export default class DefineTypeForm extends Vue {
   @Action('rewardtypes/add') addAction;
-  @Action('rewardcategories/get_form_source') formsourceAction;
+  @Action('rewardtypes/get_form_source') formsourceAction;
+  @Action('rewardcategories/get_form_source') categoriesFormsourceAction;
+  @State(state => state.rewardtypes.formSource) formSource;
   @State(state => state.rewardcategories.formSource) categoriesFormSource;
   @Watch('$route')
   onPageChange() { this.initData(); };
@@ -153,6 +167,7 @@ export default class DefineTypeForm extends Vue {
     lowstockthreshold: '',
     delivery: '1',
     category: null,
+    status: null,
     attrs: [
       { key: 1, name: '', type: '1', unit: '', order: 1, displaytype: '1', critical: '3' }
     ]
@@ -226,12 +241,10 @@ export default class DefineTypeForm extends Vue {
 
           this.$message({
             showClose: true,
-            message: this.$t('msg.addSuccess').toString(),
+            message: 'Added successfully',
             type: 'success',
             duration: 3 * 1000
           })
-
-          // await this.formsourceAction();
 
           return this.onReset();
         } catch (error) {
@@ -245,6 +258,9 @@ export default class DefineTypeForm extends Vue {
 
   created() { return this.initData(); }
 
-  async initData() { return await this.formsourceAction() }
+  async initData() {
+    await this.formsourceAction();
+    await this.categoriesFormsourceAction();
+  }
 }
 </script>

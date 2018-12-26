@@ -53,7 +53,6 @@
           </el-form>
         </el-col>
         <el-col :md="9">
-          <p>Cover</p>
           <el-upload
             ref="cover"
             action=""

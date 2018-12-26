@@ -4,7 +4,7 @@
       @selection-change="onSelectionChange">
       <el-table-column type="selection"></el-table-column>
       <el-table-column label="#" prop="id" width="70"></el-table-column>
-      <el-table-column :label="Info" width="450">
+      <el-table-column label="Info" width="450">
         <template slot-scope="scope">
           <el-row v-if="scope.row.stocks.data.length > 0" v-for="(item, index) in scope.row.stocks.data" :key="index">
             <el-col :md="24" :xs="24">
@@ -49,8 +49,6 @@
       <el-button style="margin-left: 10px" type="primary" size="small" @click="onBulkSubmit">{{ $t('default.submit') }}</el-button>
     </div>
     <scroll-top :duration="1000" :timing="'ease'"></scroll-top>
-    <!-- <edit-form :editFormState="visible" :itemId="itemId" :onClose="onHideEditForm"></edit-form> -->
-    <!-- <clone-form :cloneFormState="visibleClone" :itemId="itemId" :onClose="onHideCloneForm"></clone-form> -->
   </section>
 </template>
 
@@ -58,14 +56,10 @@
 import { Vue, Component, Prop } from "nuxt-property-decorator";
 import { Action } from "vuex-class";
 import DeleteButton from "~/components/admin/delete-button.vue";
-// import EditForm from "~/components/admin/reward/edit-form.vue";
-// import CloneForm from "~/components/admin/reward/clone-form.vue";
 
 @Component({
   components: {
-    DeleteButton,
-    // EditForm,
-    // CloneForm
+    DeleteButton
   }
 })
 export default class AdminGiftItems extends Vue {

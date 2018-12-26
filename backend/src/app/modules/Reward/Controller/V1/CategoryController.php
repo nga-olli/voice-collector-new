@@ -37,14 +37,14 @@ class CategoryController extends AbstractController
         $keyword = (string) $this->request->getQuery('keyword', null, '');
 
         // optional Filter
-        // $status = (int) $this->request->getQuery('status', null, 0);
+        $status = (int) $this->request->getQuery('status', null, 0);
 
         $formData['columns'] = '*';
         $formData['conditions'] = [
             'keyword' => $keyword,
             'searchKeywordIn' => $searchKeywordInData,
             'filterBy' => [
-                // 'status' => $status,
+                'status' => $status,
             ]
         ];
         $formData['orderBy'] = $orderBy;
@@ -125,7 +125,7 @@ class CategoryController extends AbstractController
     }
 
     /**
-     * @Route("/{id:[0-9]+}", methods={"PUT"})
+     * @Route("/{id:[0-9]+}", methods={"POST"})
      */
     public function updateAction(int $id = 0)
     {

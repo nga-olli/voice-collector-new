@@ -26,6 +26,9 @@ class GiftType extends TransformerAbstract
 
         return [
             'id' => (string) $gifttype->id,
+            'rcid' => (string) $gifttype->rcid,
+            'deliverytype' => (string) $gifttype->deliverytype,
+            'lowstockthreshold' => (string) $gifttype->lowstockthreshold,
             'name' => (string) $gifttype->name,
             'status' =>  [
                 'label' => (string) $gifttype->getStatusName(),

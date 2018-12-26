@@ -88,13 +88,12 @@ class TypeController extends AbstractController
 
         $myGiftType = new GiftTypeModel();
         $myGiftType->name = $formData['name'];
-        $myGiftType->rcid = $formData['category'];
+        $myGiftType->rcid = (int) $formData['category'];
         $myGiftType->description = $formData['description'];
-        $myGiftType->cost = $formData['cost'];
-        $myGiftType->lowstockthreshold = $formData['lowstockthreshold'];
-        $myGiftType->status = (int) GiftTypeModel::STATUS_DISABLE;
-        $myGiftType->deliverytype = (int) $formData['delivery'];
+        $myGiftType->cost = (int) $formData['cost'];
         $myGiftType->lowstockthreshold = (int) $formData['lowstockthreshold'];
+        $myGiftType->status = (int) $formData['cost'];
+        $myGiftType->deliverytype = (int) $formData['delivery'];
 
         if (!$myGiftType->create()) {
             throw new UserException(ErrorCode::DATA_CREATE_FAIL);
@@ -117,6 +116,103 @@ class TypeController extends AbstractController
                     throw new UserException(ErrorCode::DATA_CREATE_FAIL);
                 }
             }
+        }
+
+        return $this->createItem(
+            $myGiftType,
+            new GiftTypeTransformer,
+            'data'
+        );
+    }
+
+    /**
+     * @Route("/{id:[0-9]+}", methods={"POST"})
+     */
+    public function updateAction(int $id = 0)
+    {
+        $myGiftType = GiftTypeModel::findFirst([
+            'id = :id:',
+            'bind' => [
+                'id' => (int) $id
+            ]
+        ]);
+
+        if (!$myGiftType) {
+            throw new UserException(ErrorCode::DATA_NOTFOUND);
+        }
+
+        $postForm = (array) $this->request->getPost('form');
+        $formData = (array) json_decode($postForm[0]);
+
+        $myGiftType->name = $formData['name'];
+        $myGiftType->rcid = $formData['category'];
+        $myGiftType->status = $formData['status'];
+        $myGiftType->description = $formData['description'];
+        $myGiftType->cost = $formData['cost'];
+        $myGiftType->lowstockthreshold = $formData['lowstockthreshold'];
+        $myGiftType->deliverytype = (int) $formData['delivery'];
+        $myGiftType->lowstockthreshold = (int) $formData['lowstockthreshold'];
+
+        if (!$myGiftType->update()) {
+            throw new UserException(ErrorCode::DATA_CREATE_FAIL);
+        }
+
+        if (count($formData['attrs']) > 0) {
+            foreach ($formData['attrs'] as $attr) {
+                if (is_string($attr->key) && $attr->isdel === false) {
+                    $myGiftAttribute = GiftAttributeModel::findFirst([
+                        'id = :id:',
+                        'bind' => [
+                            'id' => (int) $attr->key
+                        ]
+                    ]);
+
+                    if (!$myGiftAttribute) {
+                        throw new UserException(ErrorCode::DATA_NOTFOUND);
+                    }
+                } else {
+                    $myGiftAttribute = new GiftAttributeModel();
+                }
+                
+                $myGiftAttribute->assign([
+                    'gtid' => (int) $myGiftType->id,
+                    'name' => (string) $attr->name,
+                    'unit' => (string) $attr->unit,
+                    'displayorder' => (int) $attr->order,
+                    'displaytype' => (int) $attr->displaytype,
+                    'type' => (int) $attr->type,
+                    'iscritical' => (int) $attr->critical
+                ]);
+
+                if (!$myGiftAttribute->save()) {
+                    throw new UserException(ErrorCode::DATA_UPDATE_FAIL);
+                }
+            }
+        }
+
+        return $this->createItem(
+            $myGiftType,
+            new GiftTypeTransformer,
+            'data'
+        );
+    }
+
+    /**
+     * Get single reward type
+     *
+     * @Route("/{id:[0-9]+}", methods={"GET"})
+     */
+    public function getAction(int $id = 0)
+    {
+        $myGiftType = GiftTypeModel::findFirst([
+            'id = :id:',
+            'bind' => [
+                'id' => (int) $id
+            ]
+        ]);
+
+        if (!$myGiftType) {
+            throw new UserException(ErrorCode::DATA_NOTFOUND);
         }
 
         return $this->createItem(
@@ -215,106 +311,117 @@ class TypeController extends AbstractController
         );
     }
 
-    /**
-     * Change status
-     *
-     * @Route("/{id:[0-9]+}/status", methods={"PUT"})
-     */
-    public function changestatusAction(int $id = 0)
-    {
-        $formData = (array) $this->request->getJsonRawBody();
-
-        $myGiftType = GiftTypeModel::findFirst([
-            'id = :id:',
-            'bind' => ['id' => (int) $id]
-        ]);
-
-        if (!$myGiftType) {
-            throw new UserException(ErrorCode::DATA_NOTFOUND);
-        }
-
-        $status = GiftTypeModel::STATUS_DISABLE;
-        switch ($formData['value']) {
-            case true:
-                $status = GiftTypeModel::STATUS_ENABLE;
-                break;
-            case true:
-                $status = GiftTypeModel::STATUS_DISABLE;
-                break;
-        }
-
-        $myGiftType->status = (int) $status;
-
-        if (!$myGiftType->update()) {
-            throw new UserException(ErrorCode::DATA_UPDATE_FAIL);
-        }
-
-        return $this->createItem(
-            $myGiftType,
-            new GiftTypeTransformer,
-            'data'
-        );
-    }
 
     /**
-     * Update single attr field
-     *
-     * @Route("/{id:[0-9]+}/attr_field", methods={"PUT"})
+     * @Route("/formsource", methods={"GET"})
      */
-    public function updateattrfieldAction(int $id = 0)
+    public function formsourceAction()
     {
-        $formData = (array) $this->request->getJsonRawBody();
-
-        $myGiftAttr = GiftAttributeModel::findFirst([
-            'id = :id:',
-            'bind' => ['id' => (int) $id]
-        ]);
-
-        if (!$myGiftAttr) {
-            throw new UserException(ErrorCode::DATA_NOTFOUND);
-        }
-
-        $myGiftAttr->{$formData['field']} = $formData['value'];
-
-        if (!$myGiftAttr->update()) {
-            throw new UserException(ErrorCode::DATA_UPDATE_FAIL);
-        }
-
-        return $this->createItem(
-            $myGiftAttr,
-            new GiftAttributeTransformer,
-            'data'
-        );
+        return $this->respondWithArray([
+            'statusList' => GiftTypeModel::getStatusList()
+        ], 'data');
     }
 
-    /**
-     * Delete
-     *
-     * @Route("/{id:[0-9]+}/attr", methods={"DELETE"})
-     */
-    public function deleteattrAction(int $id = 0)
-    {
-        $formData = (array) $this->request->getJsonRawBody();
+    // /**
+    //  * Change status
+    //  *
+    //  * @Route("/{id:[0-9]+}/status", methods={"PUT"})
+    //  */
+    // public function changestatusAction(int $id = 0)
+    // {
+    //     $formData = (array) $this->request->getJsonRawBody();
 
-        $myGiftAttr = GiftAttributeModel::findFirst([
-            'id = :id:',
-            'bind' => [
-                'id' => (int) $id
-            ]
-        ]);
+    //     $myGiftType = GiftTypeModel::findFirst([
+    //         'id = :id:',
+    //         'bind' => ['id' => (int) $id]
+    //     ]);
 
-        if (!$myGiftAttr) {
-            throw new UserException(ErrorCode::DATA_NOTFOUND);
-        }
+    //     if (!$myGiftType) {
+    //         throw new UserException(ErrorCode::DATA_NOTFOUND);
+    //     }
 
-        if (!$myGiftAttr->delete()) {
-            throw new UserException(ErrorCode::DATA_DELETE_FAIL);
-        }
+    //     $status = GiftTypeModel::STATUS_DISABLE;
+    //     switch ($formData['value']) {
+    //         case true:
+    //             $status = GiftTypeModel::STATUS_ENABLE;
+    //             break;
+    //         case true:
+    //             $status = GiftTypeModel::STATUS_DISABLE;
+    //             break;
+    //     }
 
-        return $this->createItem(
-            $myGiftAttr,
-            new GiftAttributeTransformer,
-            'data'
-        );
-    }
+    //     $myGiftType->status = (int) $status;
+
+    //     if (!$myGiftType->update()) {
+    //         throw new UserException(ErrorCode::DATA_UPDATE_FAIL);
+    //     }
+
+    //     return $this->createItem(
+    //         $myGiftType,
+    //         new GiftTypeTransformer,
+    //         'data'
+    //     );
+    // }
+
+    // /**
+    //  * Update single attr field
+    //  *
+    //  * @Route("/{id:[0-9]+}/attr_field", methods={"PUT"})
+    //  */
+    // public function updateattrfieldAction(int $id = 0)
+    // {
+    //     $formData = (array) $this->request->getJsonRawBody();
+
+    //     $myGiftAttr = GiftAttributeModel::findFirst([
+    //         'id = :id:',
+    //         'bind' => ['id' => (int) $id]
+    //     ]);
+
+    //     if (!$myGiftAttr) {
+    //         throw new UserException(ErrorCode::DATA_NOTFOUND);
+    //     }
+
+    //     $myGiftAttr->{$formData['field']} = $formData['value'];
+
+    //     if (!$myGiftAttr->update()) {
+    //         throw new UserException(ErrorCode::DATA_UPDATE_FAIL);
+    //     }
+
+    //     return $this->createItem(
+    //         $myGiftAttr,
+    //         new GiftAttributeTransformer,
+    //         'data'
+    //     );
+    // }
+
+    // /**
+    //  * Delete
+    //  *
+    //  * @Route("/{id:[0-9]+}/attr", methods={"DELETE"})
+    //  */
+    // public function deleteattrAction(int $id = 0)
+    // {
+    //     $formData = (array) $this->request->getJsonRawBody();
+
+    //     $myGiftAttr = GiftAttributeModel::findFirst([
+    //         'id = :id:',
+    //         'bind' => [
+    //             'id' => (int) $id
+    //         ]
+    //     ]);
+
+    //     if (!$myGiftAttr) {
+    //         throw new UserException(ErrorCode::DATA_NOTFOUND);
+    //     }
+
+    //     if (!$myGiftAttr->delete()) {
+    //         throw new UserException(ErrorCode::DATA_DELETE_FAIL);
+    //     }
+
+    //     return $this->createItem(
+    //         $myGiftAttr,
+    //         new GiftAttributeTransformer,
+    //         'data'
+    //     );
+    // }
 }

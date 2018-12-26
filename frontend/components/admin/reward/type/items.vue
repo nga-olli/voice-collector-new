@@ -8,14 +8,18 @@
       <el-table-column label="Type name" prop="name">
         <template slot-scope="scope">
           <div class="cover">
-            <img v-if="scope.row.cover !== ''" :src="scope.row.cover" width="70" height="70">
+            <img v-if="scope.row.cover !== ''" :src="scope.row.cover" width="50" height="50">
           </div>
-          <span class="fullname">{{ scope.row.name }}</span>
+          <span class="fullname">
+            <nuxt-link :to="`/admin/reward/type/${scope.row.id}`">
+              {{ scope.row.name }}
+            </nuxt-link>
+          </span>
         </template>
       </el-table-column>
       <el-table-column label="Quantity" prop="total">
         <template slot-scope="scope">
-          <el-badge :value="scope.row.total > 0 ? scope.row.total : 'Out of stock'"></el-badge>
+          <el-badge :value="scope.row.total"></el-badge>
         </template>
       </el-table-column>
       <el-table-column label="Status">
@@ -27,9 +31,11 @@
         <template slot-scope="scope">
           <el-button-group class="operation">
             <nuxt-link :to="`/admin/reward/type/${scope.row.id}`" style="display: inline-block">
-              <el-button icon="el-icon-menu" size="mini">Show items</el-button>
+              <el-button icon="el-icon-menu" size="small">Items</el-button>
             </nuxt-link>
-            <el-button icon="el-icon-edit" size="mini">Edit type</el-button>
+            <nuxt-link :to="`/admin/reward/type/edit/${scope.row.id}`" style="display: inline-block">
+              <el-button icon="el-icon-edit" size="small">Edit</el-button>
+            </nuxt-link>
             <!-- <delete-button :id="scope.row.id" store="jobs"></delete-button> -->
           </el-button-group>
         </template>
