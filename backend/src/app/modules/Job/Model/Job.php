@@ -11,6 +11,7 @@ use Core\Helper\Utils as Helper;
 /**
  * @Source('fly_job');
  * @Behavior('\Shirou\Behavior\Model\Timestampable');
+ * @HasOne('vscid', '\Voice\Model\ScriptCategory', 'id', {'alias': 'scriptcategory'})
  */
 class Job extends AbstractModel
 {

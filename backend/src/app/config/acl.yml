@@ -20,6 +20,7 @@ groups:
     Voice:
       v1:index|*
       v1:script|*
+      v1:category|*
     Reward:
       v1:index|*
       v1:category|*

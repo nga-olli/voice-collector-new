@@ -8,16 +8,17 @@ const _a33aeb8c = () => import('../pages/admin/user/index.vue' /* webpackChunkNa
 const _58ad3a3a = () => import('../pages/admin/script/index.vue' /* webpackChunkName: "pages/admin/script/index" */).then(m => m.default || m)
 const _99b6e1f8 = () => import('../pages/admin/job/index.vue' /* webpackChunkName: "pages/admin/job/index" */).then(m => m.default || m)
 const _2941d0b0 = () => import('../pages/admin/login/index.vue' /* webpackChunkName: "pages/admin/login/index" */).then(m => m.default || m)
-const _8a45d4da = () => import('../pages/admin/user/changepassword.vue' /* webpackChunkName: "pages/admin/user/changepassword" */).then(m => m.default || m)
 const _f0209e6e = () => import('../pages/admin/script/category/index.vue' /* webpackChunkName: "pages/admin/script/category/index" */).then(m => m.default || m)
-const _5366f55c = () => import('../pages/admin/user/logout.vue' /* webpackChunkName: "pages/admin/user/logout" */).then(m => m.default || m)
 const _45d717c2 = () => import('../pages/admin/reward/define.vue' /* webpackChunkName: "pages/admin/reward/define" */).then(m => m.default || m)
 const _40e60e89 = () => import('../pages/admin/user/add.vue' /* webpackChunkName: "pages/admin/user/add" */).then(m => m.default || m)
-const _4cbda036 = () => import('../pages/admin/reward/category/index.vue' /* webpackChunkName: "pages/admin/reward/category/index" */).then(m => m.default || m)
 const _0f16bdd3 = () => import('../pages/admin/job/add.vue' /* webpackChunkName: "pages/admin/job/add" */).then(m => m.default || m)
+const _8a45d4da = () => import('../pages/admin/user/changepassword.vue' /* webpackChunkName: "pages/admin/user/changepassword" */).then(m => m.default || m)
+const _4cbda036 = () => import('../pages/admin/reward/category/index.vue' /* webpackChunkName: "pages/admin/reward/category/index" */).then(m => m.default || m)
+const _5366f55c = () => import('../pages/admin/user/logout.vue' /* webpackChunkName: "pages/admin/user/logout" */).then(m => m.default || m)
 const _ff4fba18 = () => import('../pages/admin/reward/category/add.vue' /* webpackChunkName: "pages/admin/reward/category/add" */).then(m => m.default || m)
-const _8833161c = () => import('../pages/admin/reward/category/edit/_id.vue' /* webpackChunkName: "pages/admin/reward/category/edit/_id" */).then(m => m.default || m)
+const _69598cd8 = () => import('../pages/admin/script/category/add.vue' /* webpackChunkName: "pages/admin/script/category/add" */).then(m => m.default || m)
 const _70d8de36 = () => import('../pages/admin/reward/type/edit/_id.vue' /* webpackChunkName: "pages/admin/reward/type/edit/_id" */).then(m => m.default || m)
+const _8833161c = () => import('../pages/admin/reward/category/edit/_id.vue' /* webpackChunkName: "pages/admin/reward/category/edit/_id" */).then(m => m.default || m)
 const _5364786e = () => import('../pages/admin/reward/type/_id.vue' /* webpackChunkName: "pages/admin/reward/type/_id" */).then(m => m.default || m)
 const _15982c96 = () => import('../pages/index.vue' /* webpackChunkName: "pages/index" */).then(m => m.default || m)
 
@@ -105,19 +106,9 @@ export function createRouter () {
 			name: "admin-login"
 		},
 		{
-			path: "/admin/user/changepassword",
-			component: _8a45d4da,
-			name: "admin-user-changepassword"
-		},
-		{
 			path: "/admin/script/category",
 			component: _f0209e6e,
 			name: "admin-script-category"
-		},
-		{
-			path: "/admin/user/logout",
-			component: _5366f55c,
-			name: "admin-user-logout"
 		},
 		{
 			path: "/admin/reward/define",
@@ -130,14 +121,24 @@ export function createRouter () {
 			name: "admin-user-add"
 		},
 		{
+			path: "/admin/job/add",
+			component: _0f16bdd3,
+			name: "admin-job-add"
+		},
+		{
+			path: "/admin/user/changepassword",
+			component: _8a45d4da,
+			name: "admin-user-changepassword"
+		},
+		{
 			path: "/admin/reward/category",
 			component: _4cbda036,
 			name: "admin-reward-category"
 		},
 		{
-			path: "/admin/job/add",
-			component: _0f16bdd3,
-			name: "admin-job-add"
+			path: "/admin/user/logout",
+			component: _5366f55c,
+			name: "admin-user-logout"
 		},
 		{
 			path: "/admin/reward/category/add",
@@ -145,14 +146,19 @@ export function createRouter () {
 			name: "admin-reward-category-add"
 		},
 		{
-			path: "/admin/reward/category/edit/:id?",
-			component: _8833161c,
-			name: "admin-reward-category-edit-id"
+			path: "/admin/script/category/add",
+			component: _69598cd8,
+			name: "admin-script-category-add"
 		},
 		{
 			path: "/admin/reward/type/edit/:id?",
 			component: _70d8de36,
 			name: "admin-reward-type-edit-id"
+		},
+		{
+			path: "/admin/reward/category/edit/:id?",
+			component: _8833161c,
+			name: "admin-reward-category-edit-id"
 		},
 		{
 			path: "/admin/reward/type/:id?",

@@ -10,6 +10,7 @@ use Phalcon\Validation\Validator\Uniqueness;
  * @Source('fly_voice_script_category');
  * @Behavior('\Shirou\Behavior\Model\Timestampable');
  * @HasMany('id', '\Voice\Model\Script', 'vscid', {'alias': 'scripts'})
+ * @HasMany('id', '\Job\Model\Job', 'vscid', {'alias': 'jobs'})
  */
 class ScriptCategory extends AbstractModel
 {
@@ -99,5 +100,11 @@ class ScriptCategory extends AbstractModel
         }
 
         return $class;
+    }
+
+    public function afterDelete()
+    {
+        $this->getScripts()->delete();
+        $this->getJobs()->delete();
     }
 }

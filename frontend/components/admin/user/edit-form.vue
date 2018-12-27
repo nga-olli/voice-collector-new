@@ -6,7 +6,9 @@
     :before-close="onClose"
     :lock-scroll="true"
     v-on:open="onOpen"
-    v-on:close="onClosed">
+    v-on:close="onClosed"
+    width="30%"
+    top="0">
     <el-row>
       <el-col :md="24" :xs="24">
         <el-col :md="24">

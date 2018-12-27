@@ -14,6 +14,7 @@ class ScriptCategory extends TransformerAbstract
         return [
             'id' => (string) $scriptcategory->id,
             'name' => (string) $scriptcategory->name,
+            'displayorder' => (string) $scriptcategory->displayorder,
             'status' =>  [
                 'label' => (string) $scriptcategory->getStatusName(),
                 'value' => (string) $scriptcategory->status,

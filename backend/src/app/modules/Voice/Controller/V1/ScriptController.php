@@ -16,7 +16,7 @@ use Voice\{
  */
 class ScriptController extends AbstractController
 {
-    protected $recordPerPage = 100;
+    protected $recordPerPage = 50;
     private $allowedFormat = ['txt'];
 
     /**

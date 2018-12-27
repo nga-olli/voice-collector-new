@@ -11,6 +11,8 @@ use Core\Helper\Utils as Helper;
 /**
  * @Source('fly_reward_category');
  * @Behavior('\Shirou\Behavior\Model\Timestampable');
+ * @HasMany('id', '\Reward\Model\Gift', 'rcid', {'alias': 'gifts'})
+ * @HasMany('id', '\Reward\Model\GiftType', 'rcid', {'alias': 'gifttypes'})
  */
 class Category extends AbstractModel
 {
@@ -167,5 +169,11 @@ class Category extends AbstractModel
         } else {
             return '';
         }
+    }
+
+    public function afterDelete()
+    {
+        $this->getGifts()->delete();
+        $this->getGifttypes()->delete();
     }
 }

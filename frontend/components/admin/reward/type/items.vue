@@ -27,7 +27,7 @@
           <el-tag :type="scope.row.status.style" size="mini">{{ scope.row.status.label }}</el-tag>
         </template>
       </el-table-column>
-      <el-table-column class-name="td-operation" width="200">
+      <el-table-column class-name="td-operation" width="300">
         <template slot-scope="scope">
           <el-button-group class="operation">
             <nuxt-link :to="`/admin/reward/type/${scope.row.id}`" style="display: inline-block">
@@ -36,26 +36,23 @@
             <nuxt-link :to="`/admin/reward/type/edit/${scope.row.id}`" style="display: inline-block">
               <el-button icon="el-icon-edit" size="small">Edit</el-button>
             </nuxt-link>
-            <!-- <delete-button :id="scope.row.id" store="jobs"></delete-button> -->
+            <delete-button :id="scope.row.id" store="rewardtypes"></delete-button>
           </el-button-group>
         </template>
       </el-table-column>
     </el-table>
     <scroll-top :duration="1000" :timing="'ease'"></scroll-top>
-    <!-- <edit-form :editFormState="visible" :itemId="itemId" :onClose="onHideEditForm"></edit-form> -->
   </section>
 </template>
 
 <script lang="ts">
 import { Vue, Component, Prop } from "nuxt-property-decorator";
 import { Action } from 'vuex-class';
-// import DeleteButton from "~/components/admin/delete-button.vue";
-// import EditForm from '~/components/admin/job/edit-form.vue';
+import DeleteButton from "~/components/admin/delete-button.vue";
 
 @Component({
   components: {
-    // DeleteButton,
-    // EditForm
+    DeleteButton,
   }
 })
 export default class AdminRewardTypeItems extends Vue {

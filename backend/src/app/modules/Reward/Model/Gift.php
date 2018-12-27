@@ -154,8 +154,8 @@ class Gift extends AbstractModel
         return $class;
     }
 
-    // public function afterDelete()
-    // {
-    //     return $this->getStocks()->delete();
-    // }
+    public function afterDelete()
+    {
+        return $this->getStocks()->delete();
+    }
 }

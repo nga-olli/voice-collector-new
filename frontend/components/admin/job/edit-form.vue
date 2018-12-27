@@ -5,6 +5,7 @@
     :lock-scroll="true"
     v-on:open="onOpen"
     v-on:close="onClosed"
+    top="0"
     width="30%">
     <el-row>
       <el-col :md="24" :xs="24">

@@ -38,7 +38,7 @@ export default class DeleteButton extends Vue {
 
     this.$message({
       showClose: true,
-      message: `#${this.id} ${this.$t('msg.deleteSuccess').toString()}`,
+      message: `#${this.id} deleted successfully`,
       type: "success",
       duration: 3 * 1000
     });
@@ -46,8 +46,14 @@ export default class DeleteButton extends Vue {
 }
 </script>
 
-<style scoped>
+<style lang="scss" scoped>
+.el-button--danger {
+  color: #f56c6c;
+  background: transparent;
+  border: none;
+}
 .del-button {
   color: #f56c6c;
+  
 }
 </style>

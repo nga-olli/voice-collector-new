@@ -1,17 +1,16 @@
 <?php
-namespace Reward\Controller\V1;
+namespace Voice\Controller\V1;
 
 use Shirou\Constants\ErrorCode;
 use Shirou\UserException;
 use Core\Controller\AbstractController;
-use Reward\{
-    Model\Category as RewardCategoryModel,
-    Transformer\Category as RewardCategoryTransformer,
-    Transformer\Closure as RewardCategoryClosureTransformer
+use Voice\{
+    Model\ScriptCategory as VoiceScriptCategoryModel,
+    Transformer\ScriptCategory as VoiceScriptCategoryTransformer
 };
 
 /**
- * @RoutePrefix("/v1/rewards/category")
+ * @RoutePrefix("/v1/voice/scriptcategories")
  */
 class CategoryController extends AbstractController
 {
@@ -28,8 +27,7 @@ class CategoryController extends AbstractController
 
         // Search keyword in specified field model
         $searchKeywordInData = [
-            'name',
-            'description'
+            'name'
         ];
         $page = (int) $this->request->getQuery('page', null, 1);
         $orderBy = (string) $this->request->getQuery('orderby', null, 'id');
@@ -50,22 +48,22 @@ class CategoryController extends AbstractController
         $formData['orderBy'] = $orderBy;
         $formData['orderType'] = $orderType;
 
-        $myRewardCategories = RewardCategoryModel::paginate($formData, $this->recordPerPage, $page);
+        $myVoiceScriptCategories = VoiceScriptCategoryModel::paginate($formData, $this->recordPerPage, $page);
 
-        if ($myRewardCategories->total_pages > 0) {
-            if ($page == $myRewardCategories->total_pages) {
+        if ($myVoiceScriptCategories->total_pages > 0) {
+            if ($page == $myVoiceScriptCategories->total_pages) {
                 $hasMore = false;
             }
 
             return $this->createCollection(
-                $myRewardCategories->items,
-                new RewardCategoryTransformer,
+                $myVoiceScriptCategories->items,
+                new VoiceScriptCategoryTransformer,
                 'data',
                 [
                     'meta' => [
                         'recordPerPage' => $this->recordPerPage,
                         'hasMore' => $hasMore,
-                        'totalItems' => $myRewardCategories->total_items,
+                        'totalItems' => $myVoiceScriptCategories->total_items,
                         'orderBy' => $orderBy,
                         'orderType' => $orderType,
                         'page' => $page
@@ -82,18 +80,18 @@ class CategoryController extends AbstractController
      */
     public function getAction(int $id = 0)
     {
-        $myRewardCategory = RewardCategoryModel::findFirst([
+        $myVoiceScriptCategory = VoiceScriptCategoryModel::findFirst([
             'id = :id:',
             'bind' => ['id' => (int) $id]
         ]);
 
-        if (!$myRewardCategory) {
+        if (!$myVoiceScriptCategory) {
             throw new UserException(ErrorCode::DATA_NOTFOUND);
         }
 
         return $this->createItem(
-            $myRewardCategory,
-            new RewardCategoryTransformer,
+            $myVoiceScriptCategory,
+            new VoiceScriptCategoryTransformer,
             'data'
         );
     }
@@ -103,57 +101,53 @@ class CategoryController extends AbstractController
      */
     public function addAction()
     {
-        $postForm = (array) $this->request->getPost('form');
-        $formData = (array) json_decode($postForm[0]);
+        $formData = (array) $this->request->getJsonRawBody();
 
-        $myRewardCategory = new RewardCategoryModel();
-        $myRewardCategory->name = (string) $formData['name'];
-        $myRewardCategory->description = (string) $formData['description'];
-        $myRewardCategory->displayorder = (int) $formData['displayorder'];
-        $myRewardCategory->status = (int) $formData['status'];
-        $myRewardCategory->parentid = (int) $formData['parentid'];
-
-        if (!$myRewardCategory->create()) {
+        $myVoiceScriptCategory = new VoiceScriptCategoryModel();
+        $myVoiceScriptCategory->assign([
+            'name' => (string) $formData['name'],
+            'displayorder' => (int) $formData['displayorder'],
+            'status' => (int) $formData['status']
+        ]);
+        
+        if (!$myVoiceScriptCategory->create()) {
             throw new UserException(ErrorCode::DATA_CREATE_FAIL);
         }
 
         return $this->createItem(
-            $myRewardCategory,
-            new RewardCategoryTransformer,
+            $myVoiceScriptCategory,
+            new VoiceScriptCategoryTransformer,
             'response'
         );
     }
 
     /**
-     * @Route("/{id:[0-9]+}", methods={"POST"})
+     * @Route("/{id:[0-9]+}", methods={"PUT"})
      */
     public function updateAction(int $id = 0)
     {
-        $postForm = (array) $this->request->getPost('form');
-        $formData = (array) json_decode($postForm[0]);
+        $formData = (array) $this->request->getJsonRawBody();
 
-        $myRewardCategory = RewardCategoryModel::findFirst([
+        $myVoiceScriptCategory = VoiceScriptCategoryModel::findFirst([
             'id = :id:',
             'bind' => ['id' => (int) $id]
         ]);
 
-        if (!$myRewardCategory) {
+        if (!$myVoiceScriptCategory) {
             throw new UserException(ErrorCode::DATA_NOTFOUND);
         }
 
-        $myRewardCategory->name = (string) $formData['name'];
-        $myRewardCategory->description = (string) $formData['description'];
-        $myRewardCategory->displayorder = (int) $formData['displayorder'];
-        $myRewardCategory->status = (int) $formData['status'];
-        $myRewardCategory->parentid = (int) $formData['parentid'];
+        $myVoiceScriptCategory->name = (string) $formData['name'];
+        $myVoiceScriptCategory->displayorder = (int) $formData['displayorder'];
+        $myVoiceScriptCategory->status = (int) $formData['status'];
 
-        if (!$myRewardCategory->update()) {
+        if (!$myVoiceScriptCategory->update()) {
             throw new UserException(ErrorCode::USER_UPDATE_FAIL);
         }
 
         return $this->createItem(
-            $myRewardCategory,
-            new RewardCategoryTransformer,
+            $myVoiceScriptCategory,
+            new VoiceScriptCategoryTransformer,
             'data'
         );
     }
@@ -163,24 +157,24 @@ class CategoryController extends AbstractController
      */
     public function deleteAction(int $id = 0)
     {
-        $myRewardCategory = RewardCategoryModel::findFirst([
+        $myVoiceScriptCategory = VoiceScriptCategoryModel::findFirst([
             'id = :id:',
             'bind' => [
                 'id' => (int) $id
             ]
         ]);
 
-        if (!$myRewardCategory) {
+        if (!$myVoiceScriptCategory) {
             throw new UserException(ErrorCode::DATA_NOTFOUND);
         }
 
-        if (!$myRewardCategory->delete()) {
+        if (!$myVoiceScriptCategory->delete()) {
             throw new UserException(ErrorCode::DATA_DELETE_FAIL);
         }
 
         return $this->createItem(
-            $myRewardCategory,
-            new RewardCategoryTransformer,
+            $myVoiceScriptCategory,
+            new VoiceScriptCategoryTransformer,
             'data'
         );
     }
@@ -191,22 +185,8 @@ class CategoryController extends AbstractController
     public function formsourceAction()
     {
         return $this->respondWithArray([
-            'statusList' => RewardCategoryModel::getStatusList(),
-            'categoryList' => RewardCategoryModel::find()
+            'statusList' => VoiceScriptCategoryModel::getStatusList(),
+            'categoryList' => VoiceScriptCategoryModel::find()
         ], 'data');
-    }
-
-    /**
-     * @Route("/closure", methods={"GET"})
-     */
-    public function closureAction()
-    {
-        $allCategories = RewardCategoryModel::getFullParentProductCategorys();
-
-        return $this->createCollection(
-            $allCategories,
-            new RewardCategoryClosureTransformer,
-            'data'
-        );
     }
 }

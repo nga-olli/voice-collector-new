@@ -1,5 +1,3 @@
-import { setToken } from '~/helper/auth';
-
 export const state = () => ({
   data: [],
   query: {},
@@ -52,7 +50,7 @@ export const mutations = {
 
 export const actions = {
   async get_all({ commit }, { query }) {
-    return await this.$axios.$get(`/v1/users`, {
+    return await this.$axios.$get(`/v1/voice/scriptcategories`, {
       params: query
     }).then(res => {
       commit('SET_DATA', res)
@@ -61,41 +59,25 @@ export const actions = {
   },
 
   async get_form_source({ commit }) {
-    return await this.$axios.$get(`/v1/users/formsource`)
+    return await this.$axios.$get(`/v1/voice/scriptcategories/formsource`)
       .then(res => commit('SET_FORM_SOURCE', res));
   },
 
-  async bulk({ commit }, { formData }) {
-    return await this.$axios.$post(`/v1/users/bulk`, formData);
-  },
-
   async add({ commit }, { formData }) {
-    return await this.$axios.$post(`/v1/users`, formData);
+    return await this.$axios.$post(`/v1/voice/scriptcategories`, formData);
   },
 
   async get({ commit }, { id }) {
-    return await this.$axios.$get(`/v1/users/${id}`);
+    return await this.$axios.$get(`/v1/voice/scriptcategories/${id}`);
   },
 
   async update({ commit }, { id, formData }) {
-    return await this.$axios.$put(`/v1/users/${id}`, formData)
+    return await this.$axios.$put(`/v1/voice/scriptcategories/${id}`, formData)
       .then(res => commit('UPDATE_DATA', res.data));
   },
 
   async delete({ commit }, { id }) {
-    return await this.$axios.$delete(`/v1/users/${id}`)
+    return await this.$axios.$delete(`/v1/voice/scriptcategories/${id}`)
       .then(res => commit('DELETE_DATA', res.data));
-  },
-
-  async change_password({ commit }, { formData }) {
-    return await this.$axios.$put(`/v1/users/changepassword`, formData)
-      .then(res => setToken(res.data));
-  },
-
-  async login_by_email({ commit }, formData) {
-    return await this.$axios.$post('/v1/users/login/email', {
-      email: formData.email,
-      password: formData.password
-    }).then(res => setToken(res.data))
   }
 }

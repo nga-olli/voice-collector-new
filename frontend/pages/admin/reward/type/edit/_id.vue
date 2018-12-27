@@ -332,7 +332,7 @@ export default class AdminRewardEditTypePage extends Vue {
         })
       }
 
-      document.title = `Items of type: "${myType.data.name}"`;
+      document.title = `Edit type: "${myType.data.name}"`;
     } catch (error) {
       this.loading = false;
     }

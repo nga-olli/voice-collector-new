@@ -187,9 +187,9 @@ class GiftType extends AbstractModel
         }
     }
 
-    // public function afterDelete()
-    // {
-    //     $this->getAttributes()->delete();
-    //     $this->getGifts()->delete();
-    // }
+    public function afterDelete()
+    {
+        $this->getAttributes()->delete();
+        $this->getGifts()->delete();
+    }
 }

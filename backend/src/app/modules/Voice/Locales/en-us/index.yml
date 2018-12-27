@@ -1,3 +1,5 @@
 ---
 
 message-delete-user-success: Voice ID %id% was deleted successfully.
+label-status-enable: Enabled
+label-status-disable: Disabled

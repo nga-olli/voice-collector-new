@@ -37,17 +37,17 @@
             <span>{{ node.label }}</span>
             <span>
               <el-button
+                style="float: left;margin-right: 5px;"
                 type="text"
                 size="mini"
                 @click="() => edit(data)">
                 Edit
               </el-button>
-              <el-button
-                type="text"
-                size="mini"
-                @click="() => remove(node, data)">
-                Delete
-              </el-button>
+              <delete-button
+                style="float: left;margin-right: 5px;"
+                :id="data.id"
+                store="rewardcategories">
+              </delete-button>
             </span>
           </span>
         </el-tree>
@@ -67,6 +67,7 @@ import Breadcrumb from '~/components/admin/breadcrumb.vue';
 import Pagination from '~/components/admin/pagination.vue';
 import AdminRewardTypeItems from '~/components/admin/reward/type/items.vue';
 import AddForm from '~/components/admin/reward/add-form.vue';
+import DeleteButton from "~/components/admin/delete-button.vue";
 
 @Component({
   layout: 'admin',
@@ -75,7 +76,8 @@ import AddForm from '~/components/admin/reward/add-form.vue';
     Breadcrumb,
     Pagination,
     AdminRewardTypeItems,
-    AddForm
+    AddForm,
+    DeleteButton
   }
 })
 export default class AdminRewardCategoryPage extends Vue {
@@ -160,5 +162,8 @@ export default class AdminRewardCategoryPage extends Vue {
     justify-content: space-between;
     font-size: 14px;
     padding-right: 8px;
+  }
+  .el-tree-node {
+    margin-bottom: 10px;
   }
 </style>

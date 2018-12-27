@@ -3,6 +3,7 @@
     :visible.sync="addFormState"
     :before-close="onClose"
     v-on:close="onClosed"
+    top="0"
     width="40%">
     <el-row>
       <el-col :md="24" :xs="24">

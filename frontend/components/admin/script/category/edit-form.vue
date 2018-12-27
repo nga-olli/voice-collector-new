@@ -1,5 +1,3 @@
-<lang src="./lang.yml"></lang>
-
 <template>
   <el-dialog
     :visible.sync="editFormState"
@@ -7,19 +5,19 @@
     :lock-scroll="true"
     v-on:open="onOpen"
     v-on:close="onClosed"
-    top="0"
-    width="35%">
+    width="30%"
+    top="0">
     <el-row>
       <el-col :md="24" :xs="24">
         <el-col :md="24">
           <el-form autoComplete="on" label-position="left" :model="form" :rules="rules" ref="editForm">
-            <el-form-item prop="command" :label="$t('label.command')">
-              <el-input type="text" size="small" v-model="form.command"></el-input>
+            <el-form-item prop="name" label="Name">
+              <el-input type="text" size="small" v-model="form.name"></el-input>
             </el-form-item>
-            <el-form-item prop="text" :label="$t('label.text')">
-              <el-input type="text" size="small" v-model="form.text"></el-input>
+            <el-form-item prop="displayorder" label="Display order">
+              <el-input type="text" size="small" v-model="form.displayorder"></el-input>
             </el-form-item>
-            <el-form-item prop="status" :label="$t('label.status')">
+            <el-form-item prop="status" label="Status">
               <el-select size="small" v-model="form.status" :placeholder="$t('label.selectStatus')" style="width: 100%" :loading="loading">
                 <el-option v-for="item in formSource.statusList" :key="item.label" :label="item.label" :value="item.value">
                 </el-option>
@@ -43,10 +41,10 @@ import { Action, State } from 'vuex-class';
 
 @Component
 export default class EditForm extends Vue {
-  @Action('scripts/get_form_source') formsourceAction;
-  @Action('scripts/get') getAction;
-  @Action('scripts/update') updateAction;
-  @State(state => state.scripts.formSource) formSource;
+  @Action('scriptcategories/get_form_source') formsourceAction;
+  @Action('scriptcategories/get') getAction;
+  @Action('scriptcategories/update') updateAction;
+  @State(state => state.scriptcategories.formSource) formSource;
 
   @Prop() itemId: number;
   @Prop() editFormState: boolean;
@@ -61,17 +59,10 @@ export default class EditForm extends Vue {
 
   get rules() {
     return {
-      command: [
+      name: [
         {
           required: true,
-          message: this.$t('msg.commandIsRequired'),
-          trigger: 'blur'
-        }
-      ],
-      text: [
-        {
-          required: true,
-          message: this.$t('msg.textIsRequired'),
+          message: this.$t('msg.nameIsRequired'),
           trigger: 'blur'
         }
       ],
@@ -89,8 +80,8 @@ export default class EditForm extends Vue {
     return await this.getAction({ id: this.itemId })
       .then(res => {
         this.form = {
-          command: res.data.command,
-          text: res.data.text,
+          name: res.data.name,
+          displayorder: res.data.displayorder,
           status: res.data.status.value
         };
       });
@@ -133,8 +124,8 @@ export default class EditForm extends Vue {
     await this.getAction({ id: this.itemId })
       .then(res => {
         this.form = {
-          command: res.data.command,
-          text: res.data.text,
+          name: res.data.name,
+          displayorder: res.data.displayorder,
           status: res.data.status.value
         };
       });
