@@ -34,3 +34,9 @@ groups:
     Voice:
       v1:script|random
       v1:index|create
+    Job:
+      v1:index|list
+      v1:index|get
+    Reward:
+      v1:category|list
+      v1:type|list
